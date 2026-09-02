@@ -1,0 +1,65 @@
+const express = require('express');
+const router = express.Router();
+const { getDB } = require('../config/db');
+
+router.get('/', async (req, res) => {
+  try {
+    const db = getDB();
+    const query = {};
+    if (req.query.team) {
+      query.team = req.query.team;
+    }
+    const staff = await db.collection('staff').find(query).toArray();
+    res.json(staff);
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+router.get('/:id', async (req, res) => {
+  try {
+    const db = getDB();
+    const staff = await db.collection('staff').findOne({ _id: req.params.id });
+    if (!staff) return res.status(404).json({ success: false, message: 'Staff member not found' });
+    res.json(staff);
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+router.post('/', async (req, res) => {
+  try {
+    const db = getDB();
+    const result = await db.collection('staff').insertOne(req.body);
+    res.status(201).json({ success: true, id: result.insertedId, ...req.body });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  try {
+    const db = getDB();
+    const result = await db.collection('staff').updateOne(
+      { _id: req.params.id },
+      { $set: req.body }
+    );
+    if (result.matchedCount === 0) return res.status(404).json({ success: false, message: 'Staff member not found' });
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const db = getDB();
+    const result = await db.collection('staff').deleteOne({ _id: req.params.id });
+    if (result.deletedCount === 0) return res.status(404).json({ success: false, message: 'Staff member not found' });
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+module.exports = router;

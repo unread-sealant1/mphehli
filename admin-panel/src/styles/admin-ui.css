@@ -1,0 +1,127 @@
+/* Admin UI Component Styles */
+
+.admin-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.0625em;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-btn-primary {
+  background-color: var(--brand-blue);
+  color: white;
+}
+.admin-btn-primary:hover {
+  background-color: #0a1031;
+}
+
+.admin-btn-secondary {
+  background-color: var(--slate-200);
+  color: var(--slate-700);
+}
+.admin-btn-secondary:hover {
+  background-color: var(--slate-300);
+}
+
+.admin-btn-danger {
+  background-color: var(--brand-red);
+  color: white;
+}
+.admin-btn-danger:hover {
+  background-color: #B91C1C;
+}
+
+.admin-btn-ghost {
+  background-color: transparent;
+  color: var(--slate-600);
+}
+.admin-btn-ghost:hover {
+  background-color: var(--slate-100);
+}
+
+.admin-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-bottom: 1rem;
+}
+
+.admin-input-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.0625em;
+  color: var(--slate-500);
+  font-family: var(--font-display);
+}
+
+.admin-input-field {
+  padding: 0.5rem 0.75rem;
+  background-color: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.admin-input-field:focus {
+  outline: none;
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 2px rgba(18, 27, 71, 0.2);
+}
+
+.admin-input-error {
+  border-color: #EF4444 !important;
+  background-color: #FEF2F2 !important;
+}
+
+.admin-table-container {
+  background-color: white;
+  border: 1px solid var(--slate-200);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.admin-table {
+  width: 100%;
+  text-align: left;
+  font-size: 0.875rem;
+  border-collapse: collapse;
+}
+
+.admin-table thead {
+  background-color: var(--slate-50);
+  border-bottom: 1px solid var(--slate-200);
+}
+
+.admin-table th {
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.0625em;
+  color: var(--slate-500);
+  font-size: 0.625rem;
+  font-family: var(--font-display);
+}
+
+.admin-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--slate-100);
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table tr:hover {
+  background-color: var(--slate-50);
+}

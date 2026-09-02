@@ -1,0 +1,715 @@
+.container {
+  position: relative;
+}
+
+.toast {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 50;
+  background-color: #16A34A;
+  color: white;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.25rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.pageTitle {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: #050D1A;
+  font-size: 2.25rem;
+  text-transform: uppercase;
+}
+
+.pageSubtitle {
+  color: #64748B;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.btnAdd {
+  background-color: #121B47;
+  color: white;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  padding: 0.75rem 1.25rem;
+  transition: background-color 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btnAdd:hover {
+  background-color: #1743B8;
+}
+
+/* Technical Team */
+.staffGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .staffGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.staffCard {
+  background-color: white;
+  border: 1px solid #E2E8F0;
+  padding: 1.25rem;
+  display: flex;
+  gap: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.staffInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.staffCard:hover {
+  border-color: #121B47;
+}
+
+.staffPhoto {
+  width: 4rem;
+  height: 4rem;
+  object-fit: cover;
+  flex-shrink: 0;
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+}
+
+.staffCard:hover .staffPhoto {
+  filter: grayscale(0%);
+}
+
+.staffName {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: #050D1A;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+}
+
+.staffRole {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: #3B82F6;
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 0.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.staffBio {
+  color: #64748B;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.staffActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.staffEditBtn {
+  color: #64748B;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.staffEditBtn:hover {
+  color: #121B47;
+}
+
+.staffStatus {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.5625rem;
+  text-transform: uppercase;
+  padding: 0.125rem 0.5rem;
+}
+
+.statusActive {
+  color: #16A34A;
+}
+
+.statusInactive {
+  color: #64748B;
+}
+
+.marginBottom6 {
+  margin-bottom: 1.5rem;
+}
+
+.cardBtn {
+  flex: 1;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.5rem;
+  text-transform: uppercase;
+  padding: 0.25rem;
+  transition: colors 0.2s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.btnFeatureActive {
+  background-color: #CA8A04;
+  color: white;
+}
+
+.btnFeatureInactive {
+  background-color: transparent;
+  color: #64748B;
+}
+
+.btnVisibilityActive {
+  background-color: transparent;
+  color: #64748B;
+}
+
+.btnVisibilityInactive {
+  background-color: #121B47;
+  color: white;
+}
+
+.resultActive {
+  background-color: #16A34A;
+}
+
+.resultDraw {
+  background-color: #CA8A04;
+}
+
+.resultLoss {
+  background-color: #DC2626;
+}
+
+.userRoleActive {
+  background-color: #EFF6FF;
+  color: #121B47;
+  border: 1px solid #BFDBFE;
+}
+
+.userRoleEditor {
+  background-color: #F0FDF4;
+  color: #16A34A;
+  border: 1px solid #BBF7D0;
+}
+
+.userRoleViewer {
+  background-color: #FFFBEB;
+  color: #CA8A04;
+  border: 1px solid #FDE68A;
+}
+
+.userStatusActive {
+  background-color: #F0FDF4;
+  color: #16A34A;
+  border: 1px solid #BBF7D0;
+}
+
+.userStatusInactive {
+  background-color: #F8FAFC;
+  color: #64748B;
+  border: 1px solid #E2E8F0;
+}
+
+/* Player Cards */
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@media (min-width: 640px) { .cardsGrid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 768px) { .cardsGrid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1024px) { .cardsGrid { grid-template-columns: repeat(5, 1fr); } }
+@media (min-width: 1280px) { .cardsGrid { grid-template-columns: repeat(6, 1fr); } }
+
+.playerCard {
+  background-color: white;
+  border: 1px solid #E2E8F0;
+  transition: all 0.2s ease;
+}
+
+.playerCardPublished {
+  border-color: #E2E8F0;
+}
+
+.playerCardPublished:hover {
+  border-color: #121B47;
+}
+
+.playerCardDraft {
+  border-style: dashed;
+  border-color: #E2E8F0;
+  opacity: 0.6;
+}
+
+.cardMedia {
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  position: relative;
+}
+
+.cardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.cardNumber {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 1.875rem;
+}
+
+.featuredBadge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background-color: #CA8A04;
+  color: white;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.5rem;
+  text-transform: uppercase;
+  padding: 0.125rem 0.375rem;
+}
+
+.cardDetails {
+  padding: 0.75rem;
+}
+
+.cardName {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: #050D1A;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardPosition {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: #3B82F6;
+  font-size: 0.5625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cardActions {
+  display: flex;
+  gap: 0.375rem;
+  margin-top: 0.5rem;
+}
+
+.cardBtn {
+  flex: 1;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.5rem;
+  text-transform: uppercase;
+  padding: 0.25rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btnFeatureActive {
+  background-color: #CA8A04;
+  color: white;
+}
+
+.btnFeatureInactive {
+  border-color: #E2E8F0;
+  color: #64748B;
+}
+
+.btnFeatureInactive:hover {
+  border-color: #CA8A04;
+  color: #CA8A04;
+}
+
+.btnVisibilityActive {
+  border-color: #E2E8F0;
+  color: #64748B;
+}
+
+.btnVisibilityActive:hover {
+  border-color: #DC2626;
+  color: #DC2626;
+}
+
+.btnVisibilityInactive {
+  background-color: #121B47;
+  color: white;
+}
+
+/* Results Management */
+.resultsTableWrapper {
+  background-color: white;
+  border: 1px solid #E2E8F0;
+  overflow: hidden;
+}
+
+.resultsScrollWrapper {
+  overflow-x: auto;
+}
+
+.resultsTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.resultsTheadRow {
+  background-color: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.resultsTh {
+  text-align: left;
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  color: #64748B;
+}
+
+.resultsTr {
+  border-bottom: 1px solid #F1F5F9;
+  transition: background-color 0.2s ease;
+}
+
+.resultsTr:hover {
+  background-color: #FAFAFA;
+}
+
+.resultsTd {
+  padding: 0.75rem 1.25rem;
+}
+
+.resultMatch {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: #050D1A;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+}
+
+.resultCompetition {
+  color: #94A3B8;
+  font-size: 0.75rem;
+}
+
+.resultScore {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: #050D1A;
+  font-size: 1.125rem;
+}
+
+.resultDate {
+  font-size: 0.875rem;
+  color: #64748B;
+}
+
+.resultBadge {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.5625rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.5rem;
+  color: white;
+}
+
+.resultActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.resultBtn {
+  color: #64748B;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.resultBtn:hover {
+  color: #121B47;
+}
+
+.resultDelete {
+  color: #DC2626;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.resultDelete:hover {
+  color: #B91C1C;
+}
+
+/* Website Settings */
+.settingsContainer {
+  max-width: 32rem;
+}
+
+.settingsForm {
+  background-color: white;
+  border: 1px solid #E2E8F0;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.settingsField {
+  display: flex;
+  flex-direction: column;
+}
+
+.settingsLabel {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #64748B;
+  margin-bottom: 0.375rem;
+}
+
+.settingsInput {
+  width: 100%;
+  border: 1px solid #E2E8F0;
+  padding: 0.625rem;
+  font-size: 0.875rem;
+  color: #334155;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.settingsInput:focus {
+  border-color: #121B47;
+}
+
+.settingsFooter {
+  padding-top: 0.5rem;
+}
+
+.btnSaveSettings {
+  background-color: #121B47;
+  color: white;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.75rem 2rem;
+  transition: background-color 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btnSaveSettings:hover {
+  background-color: #1743B8;
+}
+
+/* Admin Users */
+.usersTableWrapper {
+  background-color: white;
+  border: 1px solid #E2E8F0;
+  overflow: hidden;
+}
+
+.usersScrollWrapper {
+  overflow-x: auto;
+}
+
+.usersTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.usersTheadRow {
+  background-color: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.usersTh {
+  text-align: left;
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  color: #64748B;
+}
+
+.usersTr {
+  border-bottom: 1px solid #F1F5F9;
+  transition: background-color 0.2s ease;
+}
+
+.usersTr:hover {
+  background-color: #FAFAFA;
+}
+
+.usersTd {
+  padding: 0.75rem 1.25rem;
+}
+
+.userCell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.userAvatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: #121B47;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatarText {
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.userName {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: #050D1A;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+}
+
+.userEmail {
+  color: #94A3B8;
+  font-size: 0.75rem;
+}
+
+.userRoleBadge {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.5625rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.5rem;
+}
+
+.userDate {
+  font-size: 0.875rem;
+  color: #64748B;
+}
+
+.userStatusBadge {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.5625rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.5rem;
+}
+
+.userActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.userBtn {
+  color: #64748B;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.userBtn:hover {
+  color: #121B47;
+}
+
+.userDelete {
+  color: #DC2626;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.userDelete:hover {
+  color: #B91C1C;
+}

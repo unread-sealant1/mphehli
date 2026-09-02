@@ -1,0 +1,483 @@
+.container {
+  position: relative;
+}
+
+.toast {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 50;
+  background-color: #16A34A;
+  color: white;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.25rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 2rem;
+  max-width: 24rem;
+  width: 100%;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.modalTitle {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: #050D1A;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.modalButtons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.btnDelete {
+  flex: 1;
+  background-color: #DC2626;
+  color: white;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.75rem;
+  transition: background-color 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btnDelete:hover {
+  background-color: #B91C1C;
+}
+
+.btnCancel {
+  flex: 1;
+  background-color: transparent;
+  border: 1px solid #E2E8F0;
+  color: #334155;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.75rem;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.btnCancel:hover {
+  background-color: #F8FAFC;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.pageTitle {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: #050D1A;
+  font-size: 2.25rem;
+  text-transform: uppercase;
+}
+
+.pageSubtitle {
+  color: #64748B;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.btnAdd {
+  background-color: #059669;
+  color: white;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.25rem;
+  transition: background-color 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btnAdd:hover {
+  background-color: #047857;
+}
+
+.formModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.formModalContent {
+  background-color: white;
+  width: 100%;
+  max-width: 32rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  margin: 1rem 0;
+}
+
+.formHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.formTitle {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: #050D1A;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #64748B;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.closeButton:hover {
+  color: #334155;
+}
+
+.formBody {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  color: #64748B;
+  margin-bottom: 0.375rem;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid #E2E8F0;
+  padding: 0.625rem;
+  font-size: 0.875rem;
+  color: #334155;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.input:focus {
+  border-color: #121B47;
+}
+
+.textarea {
+  width: 100%;
+  border: 1px solid #E2E8F0;
+  padding: 0.625rem;
+  font-size: 0.875rem;
+  color: #334155;
+  outline: none;
+  transition: border-color 0.2s ease;
+  resize: none;
+}
+
+.textarea:focus {
+  border-color: #121B47;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .formGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.checkboxGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.checkbox {
+  width: 1rem;
+  height: 1rem;
+  accent-color: #121B47;
+}
+
+.checkboxLabel {
+  color: #334155;
+  font-size: 0.875rem;
+}
+
+.formFooter {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border-top: 1px solid #E2E8F0;
+}
+
+.btnSave {
+  flex: 1;
+  background-color: #121B47;
+  color: white;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  padding: 0.75rem;
+  transition: background-color 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btnSave:hover {
+  background-color: #1743B8;
+}
+
+.btnCancelSecondary {
+  flex: 1;
+  border: 1px solid #E2E8F0;
+  color: #64748B;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  padding: 0.75rem;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  background: none;
+}
+
+.btnCancelSecondary:hover {
+  background-color: #F8FAFC;
+}
+
+.tableWrapper {
+  background-color: white;
+  border: 1px solid #E2E8F0;
+  overflow: hidden;
+}
+
+.scrollWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.theadRow {
+  background-color: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.th {
+  text-align: left;
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #64748B;
+}
+
+.tr {
+  border-bottom: 1px solid #F1F5F9;
+  transition: background-color 0.2s ease;
+}
+
+.tr:hover {
+  background-color: #FAFAFA;
+}
+
+.td {
+  padding: 0.75rem 1.25rem;
+}
+
+.sponsorInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sponsorLogo {
+  width: 2.5rem;
+  height: 2rem;
+  background-color: #F1F5F9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.logoImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.logoText {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: #121B47;
+  font-size: 0.5625rem;
+  text-transform: uppercase;
+}
+
+.sponsorName {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: #050D1A;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+}
+
+.sponsorDesc {
+  color: #94A3B8;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.tierText {
+  color: #64748B;
+  font-size: 0.875rem;
+}
+
+.orderText {
+  color: #334155;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.statusBtn {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.5625rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.5rem;
+  transition: all 0.2s ease;
+  border: 1px solid;
+  cursor: pointer;
+}
+
+.statusActive {
+  background-color: #F0FDF4;
+  color: #16A34A;
+  border-color: #BBF7D0;
+}
+
+.statusActive:hover {
+  background-color: #DCFCE7;
+}
+
+.statusInactive {
+  background-color: #F8FAFC;
+  color: #64748B;
+  border-color: #E2E8F0;
+}
+
+.statusInactive:hover {
+  background-color: #F1F5F9;
+}
+
+.actionsCell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.actionBtn {
+  color: #64748B;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.actionBtn:hover {
+  color: #121B47;
+}
+
+.actionDelete {
+  color: #DC2626;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.actionDelete:hover {
+  color: #B91C1C;
+}
