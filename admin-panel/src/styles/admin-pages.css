@@ -769,11 +769,6 @@
 .action-emerald { background-color: #059669; color: white; }
 .action-emerald:hover { background-color: #047857; }
 
-  padding: 0.625rem;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  border-radius: 0.25rem;
-}
 
 .admin-fixture-manage-link:hover {
   background-color: var(--slate-50);
