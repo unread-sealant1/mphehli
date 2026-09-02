@@ -14,7 +14,7 @@ const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 
-app.use(cors());
+app.use(cors()); // Allow all origins for development/initial deploy; specify origins in production
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
