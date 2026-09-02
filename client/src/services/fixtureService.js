@@ -6,6 +6,14 @@ export const fixtureService = {
     if (!response.ok) throw new Error('Failed to fetch fixtures');
     return response.json();
   },
+  getUpcomingFixtures: async () => {
+    const fixtures = await fixtureService.getFixtures();
+    const now = new Date();
+    return fixtures
+      .filter(f => new Date(f.date) >= now)
+      .sort((a, b) => new Date(a.date) - new Date(b.date))
+      .slice(0, 3);
+  },
   getFixtureById: async (id) => {
     const response = await fetch(`${API_BASE_URL}/fixtures/${id}`);
     if (!response.ok) throw new Error('Fixture not found');

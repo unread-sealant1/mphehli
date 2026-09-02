@@ -6,16 +6,21 @@ export const playerService = {
     const response = await fetch(url);
     if (!response.ok) throw new Error('Failed to fetch players');
     const data = await response.json();
-    return data.map(player => ({
-      ...player,
-      id: player._id
-    }));
+    return data.map(player => {
+      const logo = player.logo ? player.logo.replace('http://localhost:5000', import.meta.env.VITE_API_URL || 'http://localhost:5000') : player.logo;
+      return {
+        ...player,
+        id: player._id,
+        logo
+      };
+    });
   },
   getPlayerById: async (id) => {
     const response = await fetch(`${API_BASE_URL}/players/${id}`);
     if (!response.ok) throw new Error('Player not found');
     const player = await response.json();
-    return { ...player, id: player._id };
+    const logo = player.logo ? player.logo.replace('http://localhost:5000', import.meta.env.VITE_API_URL || 'http://localhost:5000') : player.logo;
+    return { ...player, id: player._id, logo };
   },
   getFeaturedPlayers: async () => {
     const players = await playerService.getPlayers();
