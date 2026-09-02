@@ -1,0 +1,355 @@
+.teamPage {
+  background-color: #050D1A;
+}
+
+.loadingContainer {
+  min-height: 100vh;
+  background-color: #050D1A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  padding-top: 10rem;
+  padding-bottom: 5rem;
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: bottom;
+  opacity: 0.2;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(5, 13, 26, 0.5), #050D1A);
+}
+
+.heroContainer {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .heroContainer {
+    padding: 0 2.5rem;
+  }
+}
+
+.heroSub {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #3B82F6;
+  margin-bottom: 1rem;
+}
+
+.heroTitle {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: white;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  text-transform: uppercase;
+  line-height: 0.9;
+  margin-bottom: 1rem;
+}
+
+.heroDivider {
+  width: 3rem;
+  height: 3px;
+  background-color: #121B47;
+  margin-bottom: 1rem;
+}
+
+.heroText {
+  color: #64748B;
+  font-size: 1.125rem;
+}
+
+/* Squad */
+.squadContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem 6rem;
+}
+
+@media (min-width: 1024px) {
+  .squadContainer {
+    padding: 0 2.5rem 6rem;
+  }
+}
+
+.positionSection {
+  margin-bottom: 4rem;
+}
+
+.positionHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.positionTitle {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: white;
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.positionDivider {
+  flex: 1;
+  height: 1px;
+  background-color: #142440;
+}
+
+.positionCount {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: #3B82F6;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.playersGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .playersGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .playersGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .playersGrid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .playersGrid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* PlayerCard */
+.playerCard {
+  display: block;
+  background-color: #0D1B2E;
+  overflow: hidden;
+  position: relative;
+  text-decoration: none;
+}
+
+.playerImageWrapper {
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  position: relative;
+}
+
+.playerImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: transform 0.5s ease;
+}
+
+.playerCard:hover .playerImage {
+  transform: scale(1.05);
+}
+
+.playerOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #050D1A, rgba(5, 13, 26, 0.2), transparent);
+}
+
+.playerNumberBox {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+
+.playerNumber {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 3rem;
+  line-height: 1;
+  user-select: none;
+}
+
+.playerBadgeBox {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.playerCard:hover .playerBadgeBox {
+  opacity: 1;
+}
+
+.playerBadge {
+  background-color: #121B47;
+  color: white;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.5rem;
+}
+
+.playerInfo {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.25rem;
+}
+
+.playerName {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: white;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+.playerMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+}
+
+.playerPosition {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: #3B82F6;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.playerNumberSmall {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: #121B47;
+  font-size: 1.25rem;
+}
+
+/* Staff */
+.staffSection {
+  margin-top: 2rem;
+  padding-top: 4rem;
+  border-top: 1px solid #142440;
+}
+
+.staffHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.staffTitle {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: white;
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.staffDivider {
+  flex: 1;
+  height: 1px;
+  background-color: #142440;
+}
+
+.staffGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .staffGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.staffCard {
+  background-color: #0D1B2E;
+  overflow: hidden;
+}
+
+.staffImageWrapper {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.staffImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  filter: grayscale(100%);
+}
+
+.staffCard:hover .staffImage {
+  transform: scale(1.05);
+  filter: grayscale(0%);
+}
+
+.staffInfo {
+  padding: 1.25rem;
+}
+
+.staffName {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: white;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.staffRole {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: #3B82F6;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 0.25rem;
+}

@@ -1,0 +1,391 @@
+.loadingContainer {
+  min-height: 100vh;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #050D1A;
+}
+
+/* Hero */
+.hero {
+  background-color: #050D1A;
+  padding-top: 10rem;
+  padding-bottom: 4rem;
+}
+
+.heroContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .heroContainer {
+    padding: 0 2.5rem;
+  }
+}
+
+.heroSub {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #3B82F6;
+  margin-bottom: 1rem;
+}
+
+.heroTitle {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: white;
+  font-size: clamp(3rem, 7vw, 6rem);
+  text-transform: uppercase;
+  line-height: 0.9;
+  margin-bottom: 1rem;
+}
+
+.heroDivider {
+  width: 3rem;
+  height: 3px;
+  background-color: #121B47;
+}
+
+/* Filters */
+.filterBar {
+  background-color: #0D1B2E;
+  border-bottom: 1px solid #142440;
+  position: sticky;
+  top: 5rem; /* Adjusted from 20 because header might vary */
+  z-index: 40;
+}
+
+.filterContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .filterContainer {
+    padding: 0 2.5rem;
+  }
+}
+
+.filterControls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 0;
+}
+
+.filterBtn {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.5rem 1.25rem;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.filterBtnActive {
+  background-color: #121B47;
+  color: white;
+}
+
+.filterBtnInactive {
+  color: #64748B;
+}
+
+.filterBtnInactive:hover {
+  color: white;
+  background-color: #142440;
+}
+
+.filterSelectBox {
+  margin-left: auto;
+}
+
+.competitionSelect {
+  background-color: #142440;
+  border: 1px solid #1A3054;
+  color: #94A3B8;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.competitionSelect:focus {
+  outline: none;
+  border-color: #121B47;
+}
+
+/* Fixture List */
+.listSection {
+  padding: 3rem 0;
+  background-color: white;
+}
+
+.listContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .listContainer {
+    padding: 0 2.5rem;
+  }
+}
+
+.emptyState {
+  text-align: center;
+  padding: 5rem 0;
+  color: #94A3B8;
+}
+
+.emptyTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+}
+
+.fixturesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fixtureItem {
+  display: block;
+  border: 1px solid #E2E8F0;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.fixtureItem:hover {
+  border-color: #121B47;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.fixtureRow {
+  display: flex;
+  align-items: stretch;
+}
+
+.fixtureDateBox {
+  background-color: #050D1A;
+  color: white;
+  text-align: center;
+  padding: 1.25rem;
+  min-width: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.fixtureDay {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: white;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.fixtureMonth {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: #3B82F6;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 0.25rem;
+}
+
+.fixtureYear {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: #334155;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  margin-top: 0.125rem;
+}
+
+.fixtureMain {
+  flex: 1;
+  padding: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.fixtureDetails {
+  flex: 1;
+  min-width: 0;
+}
+
+.fixtureMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.statusBadge {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.125rem 0.5rem;
+}
+
+.badgeUpcoming { background-color: #121B47; color: white; }
+.badgeLive { background-color: #DC2626; color: white; }
+.badgeCompleted { background-color: #16A34A; color: white; }
+.badgePostponed { background-color: #CA8A04; color: white; }
+.badgeCancelled { background-color: #64748B; color: white; }
+
+.competitionTag {
+  color: #64748B;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.fixtureTeams {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+}
+
+.teamLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.teamLogo {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logoPrimary { background-color: #121B47; }
+.logoSecondary { background-color: #F1F5F9; }
+
+.logoText {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 9px;
+}
+
+.logoTextPrimary { color: white; }
+.logoTextSecondary { color: #334155; }
+
+.teamName {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: #050D1A;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fixtureScore {
+  text-align: center;
+  min-width: 60px;
+}
+
+.scoreText {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: #050D1A;
+  font-size: 1.25rem;
+}
+
+.vsText {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: #94A3B8;
+  font-size: 0.875rem;
+  letter-spacing: 0.2em;
+}
+
+.teamRight {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.teamNameRight {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: #050D1A;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+}
+
+.fixtureMetaRight {
+  display: none;
+  text-align: right;
+  font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .fixtureMetaRight {
+    display: block;
+  }
+}
+
+.kickOff {
+  color: #64748B;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.venue {
+  color: #94A3B8;
+  font-size: 12px;
+  margin-top: 0.125rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 160px;
+}
+
+.fixtureArrow {
+  color: #121B47;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.fixtureItem:hover .fixtureArrow {
+  opacity: 1;
+}

@@ -1,0 +1,69 @@
+.layoutContainer {
+  min-height: 100vh;
+  background-color: #F1F5F9;
+}
+
+.sidebar {
+  background-color: var(--color-bg-dark);
+  width: 16rem;
+}
+
+.sidebarLogo {
+  border-bottom: 1px solid var(--color-border-dark);
+}
+
+.navGroupLabel {
+  color: var(--color-text-gray);
+}
+
+.sidebarLink {
+  transition: all 0.2s ease;
+  border-radius: 0.125rem;
+}
+
+.sidebarLinkActive {
+  background-color: var(--color-primary);
+  color: var(--color-text-white);
+}
+
+.sidebarLinkInactive {
+  color: var(--color-text-gray);
+}
+
+.sidebarLinkInactive:hover {
+  color: var(--color-text-white);
+  background-color: var(--color-bg-card);
+}
+
+.bottomArea {
+  border-top: 1px solid var(--color-border-dark);
+}
+
+.logoutButton {
+  color: var(--color-error);
+}
+
+.logoutButton:hover {
+  background-color: rgba(220, 38, 38, 0.1);
+}
+
+.topBar {
+  background-color: var(--color-text-white);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.breadcrumbText {
+  color: var(--color-text-muted);
+}
+
+.breadcrumbSeparator {
+  color: var(--color-border-light);
+}
+
+.breadcrumbCurrent {
+  color: var(--color-text-dark);
+}
+
+.mainContent {
+  flex: 1;
+}

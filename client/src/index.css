@@ -618,4 +618,3 @@ footer { background: #090b0f; color: var(--white); padding: 90px var(--pad) 25px
   .search-page { padding-top: 140px; }
   .search-results > button { grid-template-columns: 75px 1fr auto; }
   .search-results b { font-size: 20px; }
-}

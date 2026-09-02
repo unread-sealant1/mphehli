@@ -1,0 +1,269 @@
+import { useState, useEffect } from 'react';
+import { sponsorService } from '../services/sponsorService';
+import ImageUpload from '../components/ImageUpload';
+import { AdminTable, AdminButton, AdminInput, AdminSelect } from '../components/AdminUI';
+import { CheckCircle2, X, Pencil, Trash2 } from 'lucide-react';
+import AdminPageTitle from '../components/AdminPageTitle';
+import '../styles/admin-pages.css';
+
+const tiers = ['Main Partner', 'Official Partner', 'Community Partner'];
+
+export default function SponsorManagement() {
+  const [sponsors, setSponsors] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [editSponsor, setEditSponsor] = useState(null);
+  const [toast, setToast] = useState('');
+  const [deleteId, setDeleteId] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadSponsors() {
+      try {
+        const data = await sponsorService.getSponsors();
+        setSponsors(data);
+      } catch (error) {
+        console.error("Error loading sponsors:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadSponsors();
+  }, []);
+
+  const blank = {
+    name: '', logo: '', description: '', website: '#',
+    tier: 'Official Partner', startDate: '', endDate: '',
+    active: true, displayOrder: 0,
+  };
+  const [form, setForm] = useState(blank);
+
+  const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(''), 3000); };
+  const set = (field, value) => setForm(f => ({ ...f, [field]: value }));
+
+  const openAdd = () => {
+    setForm({ ...blank, displayOrder: sponsors.length + 1 });
+    setEditSponsor(null);
+    setShowForm(true);
+  };
+  const openEdit = (s) => { setForm({ ...s }); setEditSponsor(s); setShowForm(true); };
+
+  const handleSave = async () => {
+    try {
+      if (editSponsor) {
+        await sponsorService.updateSponsor(editSponsor.id, form);
+        setSponsors(prev => prev.map(s => s.id === editSponsor.id ? { ...s, ...form } : s));
+        showToast('Sponsor updated');
+      } else {
+        const createdSponsor = await sponsorService.createSponsor(form);
+        setSponsors(prev => [...prev, createdSponsor]);
+        showToast('Sponsor added');
+      }
+      setShowForm(false);
+    } catch (error) {
+      console.error("Error saving sponsor:", error);
+      showToast('Error saving sponsor');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await sponsorService.deleteSponsor(id);
+      setSponsors(prev => prev.filter(s => s.id !== id));
+      setDeleteId(null);
+      showToast('Sponsor deleted');
+    } catch (error) {
+      console.error("Error deleting sponsor:", error);
+      showToast('Error deleting sponsor');
+    }
+  };
+
+  const handleToggle = async (id) => {
+    try {
+      const sponsor = sponsors.find(s => s.id === id);
+      await sponsorService.updateSponsor(id, { active: !sponsor.active });
+      setSponsors(prev => prev.map(s => s.id === id ? { ...s, active: !s.active } : s));
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="admin-page-container" style={{ justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+        <div className="admin-page-subtitle">Loading sponsors...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="admin-page-container">
+      <AdminPageTitle title="Sponsors" />
+      {toast && (
+        <div className="admin-toast">
+          <CheckCircle2 size={14} style={{ marginRight: '4px' }} /> {toast}
+        </div>
+      )}
+
+      {deleteId && (
+        <div className="admin-modal-overlay">
+          <div className="admin-modal-content">
+            <h3 className="admin-modal-title">Delete Sponsor?</h3>
+            <p className="admin-modal-text">Are you sure you want to delete this sponsor? This action cannot be undone.</p>
+            <div className="admin-modal-actions">
+              <AdminButton onClick={() => handleDelete(deleteId)} variant="danger" className="flex-1">Delete</AdminButton>
+              <AdminButton onClick={() => setDeleteId(null)} variant="secondary" className="flex-1">Cancel</AdminButton>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showForm && (
+        <div className="admin-modal-overlay">
+          <div className="admin-modal-content" style={{ maxWidth: '48rem' }}>
+            <div className="admin-form-header">
+              <h3 className="admin-modal-title">{editSponsor ? 'Edit Sponsor' : 'Add Sponsor'}</h3>
+              <button onClick={() => setShowForm(false)} className="admin-action-btn" style={{ fontSize: '1.25rem' }}>
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="admin-form-grid">
+              <div className="admin-form-section">
+                <h2 className="admin-form-section-title">Details</h2>
+                <div className="admin-form-fields">
+                  <AdminInput
+                    label="Company Name *"
+                    value={form.name}
+                    onChange={e => set('name', e.target.value)}
+                  />
+                  <div className="admin-form-group">
+                    <label className="admin-form-label">Sponsor Logo</label>
+                    <ImageUpload
+                      value={form.logo}
+                      onChange={val => set('logo', val)}
+                    />
+                  </div>
+                  <div className="admin-form-field-full">
+                    <label className="admin-form-label">Description</label>
+                    <textarea
+                      rows={3}
+                      value={form.description}
+                      onChange={e => set('description', e.target.value)}
+                      className="admin-form-textarea"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="admin-form-section">
+                <h2 className="admin-form-section-title">Partnership</h2>
+                <div className="admin-form-fields">
+                  <AdminSelect
+                    label="Sponsor Tier"
+                    value={form.tier}
+                    onChange={e => set('tier', e.target.value)}
+                    options={tiers.map(t => ({ label: t, value: t }))}
+                  />
+                  <AdminInput
+                    label="Website"
+                    value={form.website}
+                    onChange={e => set('website', e.target.value)}
+                  />
+                  <AdminInput
+                    label="Start Date"
+                    type="date"
+                    value={form.startDate}
+                    onChange={e => set('startDate', e.target.value)}
+                  />
+                  <AdminInput
+                    label="End Date"
+                    type="date"
+                    value={form.endDate}
+                    onChange={e => set('endDate', e.target.value)}
+                  />
+                  <label className="admin-form-checkbox-group">
+                    <input
+                      type="checkbox"
+                      checked={form.active}
+                      onChange={e => set('active', e.target.checked)}
+                      className="admin-form-checkbox"
+                    />
+                    <span className="admin-form-checkbox-label">Active</span>
+                  </label>
+                </div>
+
+                <div className="admin-form-actions" style={{ marginTop: '2rem' }}>
+                  <AdminButton onClick={handleSave} variant="primary" className="admin-form-submit-btn">
+                    {editSponsor ? 'Save Changes' : 'Add Sponsor'}
+                  </AdminButton>
+                  <AdminButton onClick={() => setShowForm(false)} variant="secondary" className="admin-form-cancel-link" style={{ textAlign: 'center', display: 'block', width: '100%' }}>
+                    Cancel
+                  </AdminButton>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="admin-page-header">
+        <div>
+          <h1 className="admin-page-title">Sponsors</h1>
+          <p className="admin-page-subtitle">{sponsors.filter(s => s.active).length} active sponsors</p>
+        </div>
+        <button onClick={openAdd} className="admin-btn-primary admin-btn">
+          + Add Sponsor
+        </button>
+      </div>
+
+      <AdminTable
+        headers={['Sponsor', 'Tier', 'Order', 'Status', 'Actions']}
+        data={sponsors}
+        emptyMessage="No sponsors found"
+        renderRow={(sponsor) => (
+          <tr key={sponsor.id}>
+            <td className="admin-table-cell">
+              <div className="admin-sponsor-info">
+                <div className="admin-sponsor-logo">
+                  {sponsor.logo ? (
+                    <img src={sponsor.logo} alt={sponsor.name} className="admin-sponsor-logo-img" />
+                  ) : (
+                    <span className="admin-sponsor-logo-text">{sponsor.name.split(' ').map(w => w[0]).join('').slice(0, 3)}</span>
+                  )}
+                </div>
+                <div>
+                  <div className="admin-sponsor-name">{sponsor.name}</div>
+                  <div className="admin-sponsor-desc">{sponsor.description ? sponsor.description.slice(0, 50) + '...' : 'No description'}</div>
+                </div>
+              </div>
+            </td>
+            <td className="admin-table-cell admin-sponsor-tier">
+              {sponsor.tier}
+            </td>
+            <td className="admin-table-cell admin-sponsor-order">
+              {sponsor.displayOrder}
+            </td>
+            <td className="admin-table-cell">
+              <button
+                onClick={() => handleToggle(sponsor.id)}
+                className={`admin-sponsor-status-btn ${sponsor.active ? 'admin-sponsor-status-active' : 'admin-sponsor-status-inactive'}`}
+              >
+                {sponsor.active ? 'Active' : 'Inactive'}
+              </button>
+            </td>
+            <td className="admin-table-cell admin-actions-cell">
+              <div className="flex justify-end gap-2">
+                <button onClick={() => openEdit(sponsor)} className="admin-action-btn" title="Edit">
+                  <Pencil size={14} />
+                </button>
+                <button onClick={() => setDeleteId(sponsor.id)} className="admin-action-btn admin-action-btn-delete" title="Delete">
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            </td>
+          </tr>
+        )}
+      />
+    </div>
+  );
+}

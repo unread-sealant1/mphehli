@@ -1,0 +1,245 @@
+.container {
+  padding: 0;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 2.25rem;
+}
+
+.subtitle {
+  color: var(--color-text-gray);
+}
+
+.statsGrid {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.statCard {
+  background-color: var(--color-text-white);
+  border-left: 4px solid;
+  padding: 1.5rem;
+  transition: box-shadow 0.2s ease;
+  text-decoration: none;
+}
+
+.statCard:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.statValue {
+  font-size: 2.25rem;
+  color: var(--color-text-dark);
+}
+
+.statLabel {
+  color: var(--color-text-gray);
+  margin-top: 0.5rem;
+}
+
+.contentGrid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.card {
+  background-color: var(--color-text-white);
+  border: 1px solid var(--color-border-light);
+  padding: 1.5rem;
+}
+
+.cardTitle {
+  font-size: 1.125rem;
+  margin-bottom: 1.25rem;
+}
+
+.activityList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activityItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.activityDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  margin-top: 0.375rem;
+  flex-shrink: 0;
+}
+
+.activityContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.activityAction {
+  color: #334155;
+  font-weight: 500;
+}
+
+.activityDetail {
+  color: #94A3B8;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.activityTime {
+  color: #CBD5E1;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.nextFixtureContainer {
+  text-align: center;
+}
+
+.fixtureCompetition {
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+}
+
+.fixtureTeams {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.team {
+  text-align: center;
+}
+
+.teamLogo {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.5rem;
+}
+
+.teamName {
+  color: var(--color-text-dark);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.vsText {
+  color: var(--color-primary);
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+}
+
+.fixtureInfo {
+  color: var(--color-text-gray);
+  font-size: 0.875rem;
+}
+
+.fixtureVenue {
+  color: #94A3B8;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.manageLink {
+  display: block;
+  text-align: center;
+  border: 1px solid var(--color-border-light);
+  color: var(--color-primary);
+  font-size: 0.6875rem;
+  padding: 0.5rem;
+  transition: colors 0.2s ease;
+  text-decoration: none;
+}
+
+.manageLink:hover {
+  border-color: var(--color-primary);
+}
+
+.resultItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.resultItem:last-child {
+  border-bottom: 0;
+}
+
+.resultBadge {
+  width: 2.5rem;
+  height: 1.25rem;
+  font-size: 0.5625rem;
+  color: var(--color-text-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resultDetails {
+  flex: 1;
+  min-width: 0;
+}
+
+.resultOpponent {
+  color: #334155;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.resultCompetition {
+  color: #94A3B8;
+  font-size: 0.75rem;
+}
+
+.resultScore {
+  color: var(--color-text-dark);
+  font-size: 1.125rem;
+  font-weight: 900;
+}
+
+.quickActions {
+  margin-top: 1.5rem;
+  background-color: var(--color-text-white);
+  border: 1px solid var(--color-border-light);
+  padding: 1.5rem;
+}
+
+.quickActionsTitle {
+  font-size: 1.125rem;
+  margin-bottom: 1.25rem;
+}
+
+.actionsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.actionButton {
+  font-size: 0.6875rem;
+  padding: 0.625rem 1.25rem;
+  transition: colors 0.2s ease;
+  text-decoration: none;
+}

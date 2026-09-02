@@ -1,0 +1,281 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  transition: all 0.3s ease;
+}
+
+.headerScrolled {
+  background-color: #050D1A;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+
+.headerTransparent {
+  background: linear-gradient(to bottom, rgba(5, 13, 26, 0.85), transparent);
+}
+
+.headerInner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .headerInner {
+    padding: 0 2.5rem;
+  }
+}
+
+.navContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 5rem;
+}
+
+.navRight {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  margin-left: auto;
+}
+
+.logoLink {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.logoImg {
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.logoBrand {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .logoBrand {
+    display: block;
+  }
+}
+
+.brandName {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: white;
+  font-size: 1.125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.brandSub {
+  font-family: var(--font-display);
+  color: #3B82F6;
+  font-size: 0.625rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.desktopNav {
+  display: none;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .desktopNav {
+    display: flex;
+  }
+}
+
+.navLink {
+  padding: 0.5rem 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  position: relative;
+  text-decoration: none;
+}
+
+.navLinkActive {
+  color: white;
+}
+
+.navLinkInactive {
+  color: #94A3B8;
+}
+
+.navLinkInactive:hover {
+  color: white;
+}
+
+.activeIndicator {
+  position: absolute;
+  bottom: 0;
+  left: 0.75rem;
+  right: 0.75rem;
+  height: 2px;
+  background-color: #121B47;
+  border-radius: 9999px;
+}
+
+.ctaContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ctaBtn {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #121B47;
+  color: white;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.625rem 1.25rem;
+  transition: background-color 0.2s ease;
+  text-decoration: none;
+}
+
+@media (min-width: 1024px) {
+  .ctaBtn {
+    display: flex;
+  }
+}
+
+.ctaBtn:hover {
+  background-color: #1743B8;
+}
+
+.mobileToggle {
+  display: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 1023px) {
+  .mobileToggle {
+    display: flex;
+  }
+}
+
+.toggleBar {
+  display: block;
+  width: 1.5rem;
+  height: 2px;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.barOpen1 {
+  transform: rotate(45deg) translateY(7px);
+}
+
+.barOpen2 {
+  opacity: 0;
+}
+
+.barOpen3 {
+  transform: rotate(-45deg) translateY(-7px);
+}
+
+.mobileMenu {
+  display: block;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.mobileMenuOpen {
+  max-height: 600px;
+  opacity: 1;
+}
+
+.mobileMenuClosed {
+  max-height: 0;
+  opacity: 0;
+}
+
+.mobileMenuInner {
+  background-color: #050D1A;
+  border-top: 1px solid #142440;
+  padding: 0 1.5rem 1.5rem;
+}
+
+.mobileNav {
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mobileNavLink {
+  padding: 0.75rem 1rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-left: 2px solid transparent;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.mobileNavLinkActive {
+  color: white;
+  border-left-color: #121B47;
+  background-color: #0D1B2E;
+}
+
+.mobileNavLinkInactive {
+  color: #94A3B8;
+  border-left-color: transparent;
+}
+
+.mobileNavLinkInactive:hover {
+  color: white;
+  border-left-color: #121B47;
+}
+
+.mobileCTA {
+  margin-top: 1rem;
+  display: block;
+  text-align: center;
+  background-color: #121B47;
+  color: white;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.75rem;
+  transition: background-color 0.2s ease;
+  text-decoration: none;
+}
+
+.mobileCTA:hover {
+  background-color: #1743B8;
+}
