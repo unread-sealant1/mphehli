@@ -14,6 +14,7 @@ export default function NewsArticle() {
 
   useEffect(() => {
     async function loadArticle() {
+      if (!id) return;
       try {
         const [article, allNews] = await Promise.all([
           newsService.getNewsById(id),

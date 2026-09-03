@@ -6,6 +6,10 @@ export const galleryService = {
     if (!response.ok) throw new Error('Failed to fetch gallery');
     return response.json();
   },
+  getGalleryPreview: async () => {
+    const items = await galleryService.getGallery();
+    return items.slice(0, 6);
+  },
   getGalleryItemById: async (id) => {
     const response = await fetch(`${API_BASE_URL}/gallery/${id}`);
     if (!response.ok) throw new Error('Gallery item not found');
