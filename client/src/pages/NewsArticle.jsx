@@ -14,7 +14,7 @@ export default function NewsArticle() {
 
   useEffect(() => {
     async function loadArticle() {
-      if (!id) return;
+      if (!id || id === 'undefined') return;
       try {
         const [article, allNews] = await Promise.all([
           newsService.getNewsById(id),
