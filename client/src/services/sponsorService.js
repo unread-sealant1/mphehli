@@ -6,6 +6,9 @@ export const sponsorService = {
     if (!response.ok) throw new Error('Failed to fetch sponsors');
     return response.json();
   },
+  getActiveSponsors: async () => {
+    return sponsorService.getSponsors();
+  },
   getSponsorById: async (id) => {
     const response = await fetch(`${API_BASE_URL}/sponsors/${id}`);
     if (!response.ok) throw new Error('Sponsor not found');

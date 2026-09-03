@@ -6,6 +6,9 @@ export const newsService = {
     if (!response.ok) throw new Error('Failed to fetch news');
     return response.json();
   },
+  getLatestNews: async () => {
+    return newsService.getNews();
+  },
   getNewsById: async (id) => {
     const response = await fetch(`${API_BASE_URL}/news/${id}`);
     if (!response.ok) throw new Error('Article not found');
