@@ -7,7 +7,9 @@ import { newsService } from '../services/newsService';
 import { galleryService } from '../services/galleryService';
 import { sponsorService } from '../services/sponsorService';
 import { adminService } from '../services/adminService';
+import { settingsService } from '../services/settingsService';
 import PageTitle from '../components/PageTitle';
+import ErrorMessage from '../components/ErrorMessage';
 import styles from './Home.module.css';
 
 function StatCard({ value, label }) {
@@ -29,20 +31,23 @@ export default function Home() {
     nextMatch: null,
     activeSponsors: [],
     galleryPreview: [],
-    loading: true
+    content: null,
+    loading: true,
+    error: null
   });
 
   useEffect(() => {
     async function loadData() {
       try {
-        const [players, fixtures, news, gallery, sponsors, result, stats] = await Promise.all([
+        const [players, fixtures, news, gallery, sponsors, result, stats, content] = await Promise.all([
           playerService.getFeaturedPlayers(),
           fixtureService.getUpcomingFixtures(),
           newsService.getLatestNews(),
           galleryService.getGalleryPreview(),
           sponsorService.getActiveSponsors(),
           resultService.getLatestResult(),
-          adminService.getDashboardStats()
+          adminService.getDashboardStats(),
+          settingsService.getSettings('home')
         ]);
 
         setData({
@@ -54,11 +59,12 @@ export default function Home() {
           nextMatch: fixtures[0],
           activeSponsors: sponsors,
           galleryPreview: gallery,
+          content,
           loading: false
         });
       } catch (error) {
         console.error("Error loading home page data:", error);
-        setData(prev => ({ ...prev, loading: false }));
+        setData(prev => ({ ...prev, loading: false, error: error.message }));
       }
     }
     loadData();
@@ -68,7 +74,11 @@ export default function Home() {
     return <div className={styles.loadingContainer}>Loading...</div>;
   }
 
-  const { stats, featuredPlayers, latestNews, upcomingFixtures, latestResult, nextMatch, activeSponsors, galleryPreview } = data;
+  if (data.error) {
+    return <ErrorMessage message={data.error} />;
+  }
+
+  const { stats, featuredPlayers, latestNews, upcomingFixtures, latestResult, nextMatch, activeSponsors, galleryPreview, content } = data;
 
   return (
     <div>
@@ -84,14 +94,15 @@ export default function Home() {
 
         <div className={styles.heroContent}>
           <div className={styles.heroSub}>
-            Founded 2022 · Mphehli, South Africa · Champions 2025/26
+            {content?.heroSub || 'Founded 2022 · Mphehli, South Africa · Champions 2025/26'}
           </div>
           <h1 className={styles.heroTitle}>
-            Mphehli<br />All Stars
+            {content?.heroTitle?.split('<br />')[0]}<br />
+            {content?.heroTitle?.split('<br />')[1] || 'All Stars'}
           </h1>
           <div className={styles.heroDivider} />
           <p className={styles.heroQuote}>
-            "Cometh the hour, Cometh the man."
+            {content?.heroQuote || '"Cometh the hour, Cometh the man."'}
           </p>
           <div className={styles.heroActions}>
             <Link
@@ -403,14 +414,14 @@ export default function Home() {
             <div>
               <div className={styles.storySub}>Our Story</div>
               <h2 className={styles.storyTitle}>
-                Built on<br />Belief
+                {content?.storyTitle || 'Built on Belief'}
               </h2>
               <div className={styles.storyDivider} />
               <p className={styles.storyText}>
-                Mphehli All Stars was founded in 2022 by a group of passionate individuals who believed that their community deserved more than just a football club — it deserved a symbol of excellence, ambition, and unity.
+                {content?.storyText || 'Mphehli All Stars was founded in 2022 by a group of passionate individuals who believed that their community deserved more than just a football club — it deserved a symbol of excellence, ambition, and unity.'}
               </p>
               <p className={styles.storyTextSecondary}>
-                Three years on, that belief has been turned into results. On the pitch and off it, the All Stars continue to grow, inspire, and prove that when the hour comes — the men and women of Mphehli are ready.
+                {content?.storyTextSecondary || 'Three years on, that belief has been turned into results. On the pitch and off it, the All Stars continue to grow, inspire, and prove that when the hour comes — the men and women of Mphehli are ready.'}
               </p>
               <Link
                 to="/about"

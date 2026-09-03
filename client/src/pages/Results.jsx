@@ -3,12 +3,14 @@ import { Link } from 'react-router';
 import { resultService } from '../services/resultService';
 import { getResult, getOpponent } from '../utils/fixtureUtils';
 import PageTitle from '../components/PageTitle';
+import ErrorMessage from '../components/ErrorMessage';
 import styles from './Results.module.css';
 
 export default function Results() {
   const [data, setData] = useState({
     results: [],
-    loading: true
+    loading: true,
+    error: null
   });
 
   useEffect(() => {
@@ -18,7 +20,7 @@ export default function Results() {
         setData({ results, loading: false });
       } catch (error) {
         console.error("Error loading results:", error);
-        setData(prev => ({ ...prev, loading: false }));
+        setData(prev => ({ ...prev, loading: false, error: error.message }));
       }
     }
     loadResults();
@@ -26,6 +28,10 @@ export default function Results() {
 
   if (data.loading) {
     return <div className={styles.loadingContainer}>Loading...</div>;
+  }
+
+  if (data.error) {
+    return <ErrorMessage message={data.error} />;
   }
 
   const { results } = data;

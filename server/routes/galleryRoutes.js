@@ -1,11 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const { getDB } = require('../config/db');
+const { ObjectId } = require('mongodb');
+const authMiddleware = require('../middleware/auth');
 
 router.get('/', async (req, res) => {
   try {
     const db = getDB();
-    const items = await db.collection('gallery').find({}).toArray();
+    const limit = parseInt(req.query.limit) || 0;
+    const items = await db.collection('gallery')
+      .find({})
+      .limit(limit > 0 ? limit : 0)
+      .toArray();
     res.json(items);
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -15,7 +21,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const db = getDB();
-    const item = await db.collection('gallery').findOne({ _id: req.params.id });
+    const item = await db.collection('gallery').findOne({ _id: new ObjectId(req.params.id) });
     if (!item) return res.status(404).json({ success: false, message: 'Gallery item not found' });
     res.json(item);
   } catch (error) {
@@ -23,7 +29,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', authMiddleware, async (req, res) => {
   try {
     const db = getDB();
     const result = await db.collection('gallery').insertOne(req.body);
@@ -33,11 +39,11 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', authMiddleware, async (req, res) => {
   try {
     const db = getDB();
     const result = await db.collection('gallery').updateOne(
-      { _id: req.params.id },
+      { _id: new ObjectId(req.params.id) },
       { $set: req.body }
     );
     if (result.matchedCount === 0) return res.status(404).json({ success: false, message: 'Gallery item not found' });
@@ -47,10 +53,10 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
   try {
     const db = getDB();
-    const result = await db.collection('gallery').deleteOne({ _id: req.params.id });
+    const result = await db.collection('gallery').deleteOne({ _id: new ObjectId(req.params.id) });
     if (result.deletedCount === 0) return res.status(404).json({ success: false, message: 'Gallery item not found' });
     res.json({ success: true });
   } catch (error) {

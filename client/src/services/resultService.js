@@ -1,13 +1,17 @@
 import { fixtureService } from './fixtureService';
 import { getResult } from '../utils/fixtureUtils';
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/api';
+
 export const resultService = {
   getResults: async () => {
-    const fixtures = await fixtureService.getFixtures();
-    return fixtures.filter(f => f.status === 'completed');
+    const response = await fetch(`${API_BASE_URL}/results`);
+    if (!response.ok) throw new Error('Failed to fetch results');
+    return response.json();
   },
   getLatestResult: async () => {
-    const completed = await resultService.getResults();
-    return completed[0]; // Simple latest for MVP
+    const response = await fetch(`${API_BASE_URL}/results/latest`);
+    if (!response.ok) throw new Error('Failed to fetch latest result');
+    return response.json();
   }
 };

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { settingsService } from '../services/settingsService';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import PageTitle from '../components/PageTitle';
+import ErrorMessage from '../components/ErrorMessage';
 import styles from './Contact.module.css';
 
 export default function Contact() {
@@ -9,6 +10,7 @@ export default function Contact() {
   const [sent, setSent] = useState(false);
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function loadContact() {
@@ -17,6 +19,7 @@ export default function Contact() {
         setSettings(data);
       } catch (error) {
         console.error("Error loading contact settings:", error);
+        setError(error.message);
       } finally {
         setLoading(false);
       }
@@ -30,17 +33,21 @@ export default function Contact() {
     setForm({ name: '', email: '', subject: '', message: '' });
   };
 
-  const socials = [
+  if (loading) {
+    return <div className={styles.loadingContainer}>Loading...</div>;
+  }
+
+  if (error) {
+    return <ErrorMessage message={error} />;
+  }
+
+  const socials = settings?.socials || [
     { name: 'Facebook', handle: '@MphehliAllStars', href: '#' },
     { name: 'Instagram', handle: '@mphehliallstars', href: '#' },
     { name: 'TikTok', handle: '@mphehliallstars', href: '#' },
     { name: 'X (Twitter)', handle: '@MphehliAllStars', href: '#' },
     { name: 'WhatsApp', handle: settings?.phone || '+27 00 000 0000', href: '#' },
   ];
-
-  if (loading) {
-    return <div className={styles.loadingContainer}>Loading...</div>;
-  }
 
   return (
     <div className={styles.page}>

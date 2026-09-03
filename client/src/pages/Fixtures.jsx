@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import { fixtureService } from '../services/fixtureService';
 import PageTitle from '../components/PageTitle';
+import ErrorMessage from '../components/ErrorMessage';
 import styles from './Fixtures.module.css';
 
 export default function Fixtures() {
@@ -9,7 +10,8 @@ export default function Fixtures() {
   const [competition, setCompetition] = useState('all');
   const [data, setData] = useState({
     fixtures: [],
-    loading: true
+    loading: true,
+    error: null
   });
 
   useEffect(() => {
@@ -19,7 +21,7 @@ export default function Fixtures() {
         setData({ fixtures, loading: false });
       } catch (error) {
         console.error("Error loading fixtures:", error);
-        setData(prev => ({ ...prev, loading: false }));
+        setData(prev => ({ ...prev, loading: false, error: error.message }));
       }
     }
     loadFixtures();
@@ -27,6 +29,10 @@ export default function Fixtures() {
 
   if (data.loading) {
     return <div className={styles.loadingContainer}>Loading...</div>;
+  }
+
+  if (data.error) {
+    return <ErrorMessage message={data.error} />;
   }
 
   const competitions = ['all', ...Array.from(new Set(data.fixtures.map(f => f.competition)))];

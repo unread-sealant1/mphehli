@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import { sponsorService } from '../services/sponsorService';
 import PageTitle from '../components/PageTitle';
+import ErrorMessage from '../components/ErrorMessage';
 import styles from './Sponsors.module.css';
 
 export default function Sponsors() {
   const [data, setData] = useState({
     sponsors: [],
-    loading: true
+    loading: true,
+    error: null
   });
 
   useEffect(() => {
@@ -17,7 +19,7 @@ export default function Sponsors() {
         setData({ sponsors, loading: false });
       } catch (error) {
         console.error("Error loading sponsors:", error);
-        setData(prev => ({ ...prev, loading: false }));
+        setData(prev => ({ ...prev, loading: false, error: error.message }));
       }
     }
     loadSponsors();
@@ -25,6 +27,10 @@ export default function Sponsors() {
 
   if (data.loading) {
     return <div className={styles.loadingContainer}>Loading...</div>;
+  }
+
+  if (data.error) {
+    return <ErrorMessage message={data.error} />;
   }
 
   const { sponsors } = data;

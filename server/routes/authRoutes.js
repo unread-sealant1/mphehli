@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const { getDB } = require('../config/db');
 
 // Login route
@@ -22,6 +23,11 @@ router.post('/login', async (req, res) => {
 
     res.json({
       success: true,
+      token: jwt.sign(
+        { id: user._id, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: '24h' }
+      ),
       user: {
         id: user._id,
         name: user.name,
@@ -31,35 +37,6 @@ router.post('/login', async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
-  }
-});
-
-// Temporary setup route to create the first admin user
-router.post('/setup-admin', async (req, res) => {
-  try {
-    const { email, password, name } = req.body;
-    const db = getDB();
-
-    const existingUser = await db.collection('admins').findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ success: false, message: 'Admin user already exists' });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    await db.collection('admins').insertOne({
-      name,
-      email,
-      password: hashedPassword,
-      role: 'Super Admin',
-      status: 'active',
-      createdAt: new Date()
-    });
-
-    res.json({ success: true, message: 'Admin user created successfully' });
-  } catch (error) {
-    console.error('Setup error:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });

@@ -3,27 +3,13 @@ import { Link } from 'react-router';
 import { settingsService } from '../services/settingsService';
 import { Circle } from 'lucide-react';
 import PageTitle from '../components/PageTitle';
+import ErrorMessage from '../components/ErrorMessage';
 import styles from './About.module.css';
-
-const values = [
-  { name: 'Discipline', desc: 'We hold ourselves to the highest standards, on and off the pitch.' },
-  { name: 'Teamwork', desc: 'Together we achieve what none of us can achieve alone.' },
-  { name: 'Respect', desc: 'We respect each other, our opponents, officials, and our community.' },
-  { name: 'Ambition', desc: 'We set our sights high and pursue our goals relentlessly.' },
-  { name: 'Community', desc: 'We exist to serve and inspire the people of Mphehli.' },
-];
-
-const timeline = [
-  { year: '2022', title: 'The Foundation', description: 'Mphehli All Stars is founded by Coach Themba Mabaso and a group of passionate community footballers. The first training session takes place on a Sunday morning with eleven players and one ball.' },
-  { year: 'Late 2022', title: 'First Competitive Match', description: 'The All Stars play their first official competitive fixture. A 2-1 victory sends a message — this club is here to compete.' },
-  { year: '2023', title: 'Building the Foundation', description: 'The squad grows to twenty players. The club registers with the Regional Football Association and completes its first full league season in the GMLFA Premier League, finishing 3rd place in the 2023/2024 season.' },
-  { year: '2024', title: 'A Culture Forms', description: 'Player quality increases and results improve. The All Stars continue their ascent in the GMLFA Premier League, securing a 5th place finish for the 2024/2025 season as a genuine club culture emerges.' },
-  { year: '2025', title: 'Champions of the Region', description: 'The most ambitious chapter yet. The All Stars dominate the SAFA Johannesburg Hollywoodbets Regional League for the 2025/2026 season, finishing in 1st place as League Champions.' },
-];
 
 export default function About() {
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function loadAbout() {
@@ -32,6 +18,7 @@ export default function About() {
         setSettings(data);
       } catch (error) {
         console.error("Error loading about settings:", error);
+        setError(error.message);
       } finally {
         setLoading(false);
       }
@@ -41,6 +28,10 @@ export default function About() {
 
   if (loading) {
     return <div className={styles.loadingContainer}>Loading...</div>;
+  }
+
+  if (error) {
+    return <ErrorMessage message={error} />;
   }
 
   return (
@@ -137,7 +128,7 @@ export default function About() {
             </h2>
           </div>
           <div className={styles.valuesGrid}>
-            {values.map((v, i) => (
+            {(settings?.values || []).map((v, i) => (
               <div key={v.name} className={styles.valueCard}>
                 <div className={styles.valueNumber}>
                   0{i + 1}
@@ -164,7 +155,7 @@ export default function About() {
           <div className={styles.timelineWrapper}>
             <div className={styles.timelineLine} />
             <div className={styles.timelineList}>
-              {timeline.map((item, i) => (
+              {(settings?.timeline || []).map((item, i) => (
                 <div key={item.year} className={styles.timelineItem}>
                   <div className={styles.timelineContent}>
                     <div className={styles.timelineCard}>

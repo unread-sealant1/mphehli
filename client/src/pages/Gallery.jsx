@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { galleryService } from '../services/galleryService';
 import { X } from 'lucide-react';
 import PageTitle from '../components/PageTitle';
+import ErrorMessage from '../components/ErrorMessage';
 import styles from './Gallery.module.css';
 
 const filters = ['All', 'Images', 'Videos', 'Matchday', 'Training', 'Events', 'Players', 'Supporters'];
@@ -11,7 +12,8 @@ export default function Gallery() {
   const [lightbox, setLightbox] = useState(null);
   const [data, setData] = useState({
     items: [],
-    loading: true
+    loading: true,
+    error: null
   });
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export default function Gallery() {
         setData({ items, loading: false });
       } catch (error) {
         console.error("Error loading gallery:", error);
-        setData(prev => ({ ...prev, loading: false }));
+        setData(prev => ({ ...prev, loading: false, error: error.message }));
       }
     }
     loadGallery();
@@ -29,6 +31,10 @@ export default function Gallery() {
 
   if (data.loading) {
     return <div className={styles.loadingContainer}>Loading...</div>;
+  }
+
+  if (data.error) {
+    return <ErrorMessage message={data.error} />;
   }
 
   const published = data.items.filter(g => g.published);

@@ -1,18 +1,15 @@
 const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/api';
 
 export const fixtureService = {
-  getFixtures: async () => {
-    const response = await fetch(`${API_BASE_URL}/fixtures`);
+  getFixtures: async (options = {}) => {
+    const { upcoming } = options;
+    const url = upcoming ? `${API_BASE_URL}/fixtures?upcoming=true` : `${API_BASE_URL}/fixtures`;
+    const response = await fetch(url);
     if (!response.ok) throw new Error('Failed to fetch fixtures');
     return response.json();
   },
   getUpcomingFixtures: async () => {
-    const fixtures = await fixtureService.getFixtures();
-    const now = new Date();
-    return fixtures
-      .filter(f => new Date(f.date) >= now)
-      .sort((a, b) => new Date(a.date) - new Date(b.date))
-      .slice(0, 3);
+    return fixtureService.getFixtures({ upcoming: true });
   },
   getFixtureById: async (id) => {
     const response = await fetch(`${API_BASE_URL}/fixtures/${id}`);

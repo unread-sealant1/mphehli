@@ -1,14 +1,15 @@
 const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/api';
 
 export const galleryService = {
-  getGallery: async () => {
-    const response = await fetch(`${API_BASE_URL}/gallery`);
+  getGallery: async (options = {}) => {
+    const { limit } = options;
+    const url = limit ? `${API_BASE_URL}/gallery?limit=${limit}` : `${API_BASE_URL}/gallery`;
+    const response = await fetch(url);
     if (!response.ok) throw new Error('Failed to fetch gallery');
     return response.json();
   },
   getGalleryPreview: async () => {
-    const items = await galleryService.getGallery();
-    return items.slice(0, 6);
+    return galleryService.getGallery({ limit: 6 });
   },
   getGalleryItemById: async (id) => {
     const response = await fetch(`${API_BASE_URL}/gallery/${id}`);

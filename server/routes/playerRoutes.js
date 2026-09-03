@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { getDB } = require('../config/db');
 const { ObjectId } = require('mongodb');
+const authMiddleware = require('../middleware/auth');
 const fs = require('fs');
 const path = require('path');
 
@@ -12,11 +13,17 @@ function log(msg) {
 
 router.get('/', async (req, res) => {
   try {
-    log(`GET /players - team: ${req.query.team || 'all'}`);
+    log(`GET /players - team: ${req.query.team || 'all'}, featured: ${req.query.featured || 'all'}, position: ${req.query.position || 'all'}`);
     const db = getDB();
     const query = {};
     if (req.query.team) {
       query.team = req.query.team;
+    }
+    if (req.query.featured === 'true') {
+      query.featured = true;
+    }
+    if (req.query.position) {
+      query.position = req.query.position;
     }
     const players = await db.collection('players').find(query).toArray();
     log(`Found ${players.length} players`);
@@ -38,7 +45,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', authMiddleware, async (req, res) => {
   try {
     log(`POST /players - body: ${JSON.stringify(req.body)}`);
     const db = getDB();
@@ -50,7 +57,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', authMiddleware, async (req, res) => {
   try {
     const db = getDB();
     const result = await db.collection('players').updateOne(
@@ -64,7 +71,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
   try {
     const db = getDB();
     const result = await db.collection('players').deleteOne({ _id: new ObjectId(req.params.id) });

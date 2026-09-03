@@ -14,6 +14,7 @@ export const uploadService = {
 
     const data = await response.json();
     // Prepend server base URL to the image path
-    return `http://localhost:5000${data.imageUrl}`;
+    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    return `${baseUrl}${data.imageUrl}`;
   },
 };

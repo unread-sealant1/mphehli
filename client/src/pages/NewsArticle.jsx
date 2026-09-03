@@ -124,9 +124,13 @@ export default function NewsArticle() {
         {/* Share */}
         <div className="mt-6 flex items-center gap-4">
           <span className="font-display font-700 text-[11px] tracking-[0.2em] uppercase text-[#64748B]">Share</span>
-          {['Twitter/X', 'Facebook', 'WhatsApp'].map(s => (
-            <a key={s} href="#" className="font-display font-700 text-[11px] tracking-[0.1em] uppercase text-[#121B47] hover:text-[#050D1A] transition-colors">
-              {s}
+          {[
+            { name: 'Twitter/X', href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(article.title)}` },
+            { name: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}` },
+            { name: 'WhatsApp', href: `https://api.whatsapp.com/send?text=${encodeURIComponent(article.title + ' ' + window.location.href)}` },
+          ].map(s => (
+            <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" className="font-display font-700 text-[11px] tracking-[0.1em] uppercase text-[#121B47] hover:text-[#050D1A] transition-colors">
+              {s.name}
             </a>
           ))}
         </div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import { newsService } from '../services/newsService';
 import PageTitle from '../components/PageTitle';
+import ErrorMessage from '../components/ErrorMessage';
 import styles from './News.module.css';
 
 const categories = ['All', 'Club News', 'Match Reports', 'Player News', 'Announcements', 'Transfers', 'Community'];
@@ -11,7 +12,8 @@ export default function News() {
   const [search, setSearch] = useState('');
   const [data, setData] = useState({
     articles: [],
-    loading: true
+    loading: true,
+    error: null
   });
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export default function News() {
         setData({ articles, loading: false });
       } catch (error) {
         console.error("Error loading news:", error);
-        setData(prev => ({ ...prev, loading: false }));
+        setData(prev => ({ ...prev, loading: false, error: error.message }));
       }
     }
     loadNews();
@@ -29,6 +31,10 @@ export default function News() {
 
   if (data.loading) {
     return <div className={styles.loadingContainer}>Loading...</div>;
+  }
+
+  if (data.error) {
+    return <ErrorMessage message={data.error} />;
   }
 
   const published = data.articles.filter(a => a.status === 'published');

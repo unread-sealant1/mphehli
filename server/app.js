@@ -1,12 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const authMiddleware = require('./middleware/auth');
 const playerRoutes = require('./routes/playerRoutes');
 const fixtureRoutes = require('./routes/fixtureRoutes');
 const newsRoutes = require('./routes/newsRoutes');
 const galleryRoutes = require('./routes/galleryRoutes');
 const sponsorRoutes = require('./routes/sponsorRoutes');
 const staffRoutes = require('./routes/staffRoutes');
+const resultRoutes = require('./routes/resultRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
@@ -24,9 +26,10 @@ app.use('/api/news', newsRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/sponsors', sponsorRoutes);
 app.use('/api/staff', staffRoutes);
+app.use('/api/results', resultRoutes);
 app.use('/api/uploads', uploadRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/settings', settingsRoutes);
+app.use('/api/admin', authMiddleware, adminRoutes);
+app.use('/api/settings', authMiddleware, settingsRoutes);
 app.use('/api/auth', authRoutes);
 
 app.get('/api/health', (req, res) => {

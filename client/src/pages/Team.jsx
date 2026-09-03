@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { playerService } from '../services/playerService';
 import { staffService } from '../services/staffService';
 import PageTitle from '../components/PageTitle';
+import ErrorMessage from '../components/ErrorMessage';
 import styles from './Team.module.css';
 
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
@@ -47,7 +48,8 @@ export default function Team() {
   const [data, setData] = useState({
     players: [],
     staff: [],
-    loading: true
+    loading: true,
+    error: null
   });
 
   useEffect(() => {
@@ -60,7 +62,7 @@ export default function Team() {
         setData({ players, staff, loading: false });
       } catch (error) {
         console.error("Error loading team data:", error);
-        setData(prev => ({ ...prev, loading: false }));
+        setData(prev => ({ ...prev, loading: false, error: error.message }));
       }
     }
     loadData();
@@ -68,6 +70,10 @@ export default function Team() {
 
   if (data.loading) {
     return <div className={styles.loadingContainer}>Loading...</div>;
+  }
+
+  if (data.error) {
+    return <ErrorMessage message={data.error} />;
   }
 
   const { players, staff } = data;
