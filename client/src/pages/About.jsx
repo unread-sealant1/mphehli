@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { settingsService } from '../services/settingsService';
 import { Circle } from 'lucide-react';
 import PageTitle from '../components/PageTitle';

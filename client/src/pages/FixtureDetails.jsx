@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router';
+import { useParams, Link } from 'react-router-dom';
 import { fixtureService } from '../services/fixtureService';
 import { getResult } from '../utils/fixtureUtils';
 import { Target } from 'lucide-react';

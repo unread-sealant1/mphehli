@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { playerService } from '../services/playerService';
 import { fixtureService } from '../services/fixtureService';
 import { resultService } from '../services/resultService';

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { resultService } from '../services/resultService';
 import { getResult, getOpponent } from '../utils/fixtureUtils';
 import PageTitle from '../components/PageTitle';
