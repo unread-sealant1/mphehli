@@ -1,0 +1,107 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  STAFF
+  USER
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  password String
+  role     Role    @default(USER)
+  name     String?
+}
+
+model SiteAsset {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique // e.g., "home-hero", "community-bg"
+  url       String
+  altText   String?
+  updatedAt DateTime @updatedAt
+}
+
+model Team {
+  id          Int       @id @default(autoincrement())
+  name        String
+  slug        String    @unique
+  identity    String?   // e.g., "TEAM 01 / BLUE"
+  competition String?   // e.g., "ABC MOTSEPE LEAGUE"
+  imageUrl    String?
+  players     Player[]
+  fixtures    Fixture[]
+  news        News[]
+  createdAt   DateTime  @default(now())
+}
+
+model Player {
+  id        Int      @id @default(autoincrement())
+  name      String
+  position  String
+  number    Int?
+  bio       String?  @db.Text
+  imageUrl  String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  teamId    Int?
+  team      Team?    @relation(fields: [teamId], references: [id])
+}
+
+enum MatchStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+model Fixture {
+  id            Int         @id @default(autoincrement())
+  opponent      String
+  date          DateTime
+  location      String
+  result        String?     // e.g., "2-1"
+  status        MatchStatus @default(SCHEDULED)
+  homeAway      Boolean     // true = home, false = away
+  teamId        Int?
+  team          Team?        @relation(fields: [teamId], references: [id])
+}
+
+model News {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String   @db.Text
+  category  String   // e.g., "Match Report", "Announcement"
+  imageUrl  String?
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  teamId    Int?
+  team      Team?    @relation(fields: [teamId], references: [id])
+}
+
+model Media {
+  id        Int      @id @default(autoincrement())
+  url       String
+  type      String   // "IMAGE", "VIDEO"
+  altText   String?
+  uploadedAt DateTime @default(now())
+}
+
+model ClubSettings {
+  id               Int      @id @default(1)
+  clubName         String    @default("MPHEHLI ALL STARS")
+  contactEmail     String    @default("info@mphehliallstarsfc.com")
+  facebookUrl      String?
+  twitterUrl       String?
+  instagramUrl    String?
+  logoUrl          String?
+  slogan           String?   // "COMETH THE HOUR, COMETH THE MAN"
+  identityStatement String?  // "ONE CLUB. MULTIPLE TEAMS. ONE IDENTITY."
+  updatedAt        DateTime @updatedAt
+}
