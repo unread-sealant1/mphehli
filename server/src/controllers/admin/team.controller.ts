@@ -1,7 +1,11 @@
 import { Request, Response } from 'express';
 import prisma from '../../config/db';
 
-export const updateTeamImage = async (req: Request, res: Response) => {
+interface MulterRequest extends Request {
+  file?: any;
+}
+
+export const updateTeamImage = async (req: MulterRequest, res: Response) => {
   try {
     const { id } = req.params;
     let imageUrl = undefined;

@@ -1,6 +1,10 @@
 import { Request, Response } from 'express';
 import prisma from '../../config/db';
 
+interface MulterRequest extends Request {
+  file?: any;
+}
+
 export const getAssets = async (req: Request, res: Response) => {
   try {
     const assets = await prisma.siteAsset.findMany();
@@ -10,7 +14,7 @@ export const getAssets = async (req: Request, res: Response) => {
   }
 };
 
-export const updateAsset = async (req: Request, res: Response) => {
+export const updateAsset = async (req: MulterRequest, res: Response) => {
   try {
     const { key, altText } = req.body;
     if (!key) return res.status(400).json({ error: 'Asset key is required' });

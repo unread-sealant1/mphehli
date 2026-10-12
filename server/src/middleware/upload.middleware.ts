@@ -1,6 +1,7 @@
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import { Request } from 'express';
 
 const UPLOAD_DIR = 'public/uploads';
 
@@ -14,12 +15,12 @@ folders.forEach(folder => {
 });
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const folder = req.body.uploadFolder || 'media';
+  destination: (req: Request, file: Express.Multer.File, cb: any) => {
+    const folder = (req.body as any).uploadFolder || 'media';
     const dir = path.join(UPLOAD_DIR, folder);
     cb(null, dir);
   },
-  filename: (req, file, cb) => {
+  filename: (req: Request, file: Express.Multer.File, cb: any) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, `${file.fieldname}-${uniqueSuffix}${path.extname(file.originalname)}`);
   },
@@ -28,7 +29,7 @@ const storage = multer.diskStorage({
 export const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-  fileFilter: (req, file, cb) => {
+  fileFilter: (req: Request, file: Express.Multer.File, cb: any) => {
     const allowedTypes = /jpeg|jpg|png|gif|webp|mp4|mov/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype);

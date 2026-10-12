@@ -1,6 +1,10 @@
 import { Request, Response } from 'express';
 import prisma from '../../config/db';
 
+interface MulterRequest extends Request {
+  file?: any;
+}
+
 export const getSettings = async (req: Request, res: Response) => {
   try {
     const settings = await prisma.clubSettings.findFirst();
@@ -20,7 +24,7 @@ export const getSettings = async (req: Request, res: Response) => {
   }
 };
 
-export const updateSettings = async (req: Request, res: Response) => {
+export const updateSettings = async (req: MulterRequest, res: Response) => {
   try {
     const data = { ...req.body };
     if (req.file) {

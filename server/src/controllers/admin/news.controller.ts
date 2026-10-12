@@ -1,6 +1,10 @@
 import { Request, Response } from 'express';
 import prisma from '../../config/db';
 
+interface MulterRequest extends Request {
+  file?: any;
+}
+
 export const getNews = async (req: Request, res: Response) => {
   try {
     const news = await prisma.news.findMany({
@@ -12,7 +16,7 @@ export const getNews = async (req: Request, res: Response) => {
   }
 };
 
-export const createNews = async (req: Request, res: Response) => {
+export const createNews = async (req: MulterRequest, res: Response) => {
   try {
     const data = { ...req.body };
     if (req.file) {
@@ -32,7 +36,7 @@ export const createNews = async (req: Request, res: Response) => {
   }
 };
 
-export const updateNews = async (req: Request, res: Response) => {
+export const updateNews = async (req: MulterRequest, res: Response) => {
   try {
     const { id } = req.params;
     const data = { ...req.body };
