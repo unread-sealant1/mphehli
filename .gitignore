@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+jspm_packages/
+web_modules/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs
+*.log
+
+# Database
+*.db
+*.sqlite
+# Prisma
+# Ignore the generated client, but keep the schema
+# node_modules/.prisma/client
+
+# Uploads
+# Ignore user-uploaded content to prevent bloat and leakage
+server/public/uploads/
+client/public/uploads/
+
+# System/Temp
+.claude/
+.npm/

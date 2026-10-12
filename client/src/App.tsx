@@ -56,13 +56,13 @@ const routePages = Object.entries(routes).reduce<Record<string, Page>>(
 const images = {
   hero: "/ABC/heroo.JPG",
   action: "/ABC/IMG_7900.JPG",
-  ladies: "https://images.unsplash.com/photo-1613330591335-a3298c40008b?auto=format&fit=crop&w=1600&q=85",
+  ladies: "/Ladies/WhatsApp Image 2026-10-02 at 15.52.00.jpeg",
   huddle: "/ABC/WhatsApp Image 2026-10-01 at 16.47.29.jpeg",
   portrait: "/ABC/IMG_7880.JPG",
-  training: "/ABC/IMG_8000.JPG",
+  training: "/All-Stars/IMG_7762.JPG",
   celebrate: "/ABC/WhatsApp Image 2026-10-01 at 16.48.05.jpeg",
   community: "/ABC/WhatsApp Image 2026-10-01 at 16.45.05.jpeg",
-  women: "https://images.unsplash.com/photo-1612547328137-34fc6bc44744?auto=format&fit=crop&w=1400&q=85",
+  women: "/Ladies/WhatsApp Image 2026-10-02 at 16.00.43.jpeg",
 };
 
 const navItems = ["TEAMS", "FIXTURES", "RESULTS", "TABLES", "NEWS", "MEDIA", "CLUB"];
@@ -72,7 +72,7 @@ function Crest({ light = false }: { light?: boolean }) {
     <img
       src="/color-logo-no-bg.png"
       alt="Mphehli All Stars Logo"
-      className="w-full h-full object-contain"
+      className={`w-full h-full object-contain ${light ? "invert brightness-200" : ""}`}
       style={{
         maxWidth: '80px',
         maxHeight: '80px',
@@ -118,9 +118,10 @@ function SectionHead({ eyebrow, title, action }: { eyebrow: string; title: strin
   );
 }
 
-function Header({ setPage }: { setPage: (page: Page) => void }, settings: any) {
+function Header({ setPage, settings }: { setPage: (page: Page) => void; settings: any }) {
   const [switcher, setSwitcher] = useState(false);
   const [mobileMenu, setMobileMenu] = useState(false);
+
 
   useEffect(() => {
     if (!switcher) return;
@@ -254,24 +255,67 @@ function MatchLockup({ compact = false }: { compact?: boolean }) {
 }
 
 function Home({ setPage }: { setPage: (page: Page) => void }) {
+  const [fixtures, setFixtures] = useState<any[]>([]);
+  const [news, setNews] = useState<any[]>([]);
+  const [standings, setStandings] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [fixtureFilter, setFixtureFilter] = useState("ALL");
+
+  useEffect(() => {
+    async function loadHomeData() {
+      try {
+        const [fixturesData, newsData, standingsData] = await Promise.all([
+          api.getFixtures(),
+          api.getNews({ }),
+          api.getStandings(),
+        ]);
+        setFixtures(fixturesData);
+        setNews(newsData);
+        setStandings(standingsData);
+      } catch (e) {
+        console.error("Error loading home data", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadHomeData();
+  }, []);
+
+  if (loading) return <div className="h-screen w-full flex items-center justify-center bg-slate-50 text-slate-400 font-bold uppercase tracking-widest">Loading Home...</div>;
+
+  const heroMatch = fixtures.find(f => f.status === "COMPLETED") || fixtures[0];
+  const nextMatch = fixtures.find(f => f.status === "SCHEDULED") || fixtures[0];
+  const topNews = news.slice(0, 3);
+
   return (
     <main>
       <section className="hero" style={{ backgroundImage: `url(${images.hero})` }}>
         <div className="hero-shade" />
         <div className="hero-kicker">
           <span className="live-dot" /> FULL TIME
-          <span>ABC MOTSEPE LEAGUE</span>
+          <span>{heroMatch?.competition || "LEAGUE MATCH"}</span>
         </div>
         <div className="hero-content">
           <div className="hero-result">
-            <MatchLockup />
+            <div className="match-lockup">
+              <div className="match-team">
+                <Crest light />
+                <strong className="uppercase">{heroMatch?.homeTeam || "HOME TEAM"}</strong>
+              </div>
+              <div className="match-score">
+                <span>{heroMatch?.homeScore || "0"}</span><em>—</em><span>{heroMatch?.awayScore || "0"}</span>
+              </div>
+              <div className="match-team match-team--away">
+                <div className="opponent-crest">{heroMatch?.awayTeam?.charAt(0) || "O"}</div>
+                <strong className="uppercase">{heroMatch?.awayTeam || "AWAY TEAM"}</strong>
+              </div>
+            </div>
             <div className="hero-meta">
-              <span>26 SEPTEMBER 2026</span><span>IKAGENG STADIUM</span>
+              <span>{heroMatch?.date || "DATE TBC"}</span><span>{heroMatch?.venue || "STADIUM TBC"}</span>
             </div>
           </div>
           <div className="hero-side">
-            <p>UNITED OPEN THE SEASON<br />WITH A STATEMENT.</p>
+            <p>{heroMatch?.summary || "MATCH REPORT PENDING."}</p>
             <LinkButton inverse onClick={() => setPage("match")}>MATCH CENTRE</LinkButton>
           </div>
         </div>
@@ -281,19 +325,19 @@ function Home({ setPage }: { setPage: (page: Page) => void }) {
       <section className="next-match">
         <div className="next-match__label">
           <span className="eyebrow">NEXT MATCH</span>
-          <b>DATE TBC</b>
-          <small>SCHEDULE PENDING</small>
+          <b>{nextMatch?.date || "DATE TBC"}</b>
+          <small>{nextMatch?.status || "SCHEDULE PENDING"}</small>
         </div>
         <div className="next-match__teams">
-          <strong>MPHEHLI UNITED</strong>
+          <strong className="uppercase">{nextMatch?.homeTeam || "HOME TEAM"}</strong>
           <Crest />
           <span>VS</span>
-          <div className="opponent-crest opponent-crest--dark">—</div>
-          <strong>OPPONENT TBC</strong>
+          <div className="opponent-crest opponent-crest--dark">{nextMatch?.awayTeam?.charAt(0) || "—"}</div>
+          <strong className="uppercase">{nextMatch?.awayTeam || "OPPONENT TBC"}</strong>
         </div>
         <div className="next-match__meta">
-          <span>ABC MOTSEPE LEAGUE</span>
-          <b>VENUE TBC</b>
+          <span>{nextMatch?.competition || "COMPETITION TBC"}</span>
+          <b>{nextMatch?.venue || "VENUE TBC"}</b>
           <LinkButton onClick={() => setPage("fixtures")}>VIEW FIXTURES</LinkButton>
         </div>
       </section>
@@ -301,29 +345,37 @@ function Home({ setPage }: { setPage: (page: Page) => void }) {
       <section className="editorial section">
         <SectionHead eyebrow="THE LATEST" title="INSIDE THE CLUB" action="VIEW ALL NEWS" />
         <div className="editorial-grid">
-          <article className="lead-story" onClick={() => setPage("article")}>
-            <img src={images.celebrate} alt="Football team celebrating together after a match" />
-            <div className="story-overlay">
-              <span className="category">MATCH REPORT</span>
-              <h3>FIVE-STAR UNITED<br />SET THE STANDARD</h3>
-              <p>The confirmed full-time result from Ikageng Stadium.</p>
-            </div>
-          </article>
-          <article className="side-story">
-            <img src={images.ladies} alt="Ladies football team in match action" />
-            <div><span className="category">LADIES</span><h3>THE WORK CONTINUES: A NEW WEEK AT TRAINING</h3><small>27 SEP 2026</small></div>
-          </article>
-          <article className="side-story side-story--dark">
-            <div><span className="category">TEAM NEWS</span><h3>UNITED NAME SQUAD FOR OPENING HOME FIXTURE</h3><small>25 SEP 2026</small></div>
-            <img src={images.huddle} alt="Players huddle before a football match" />
-          </article>
+          {topNews.length > 0 ? (
+            <>
+              <article className="lead-story" onClick={() => setPage("article")}>
+                <img src={topNews[0].image || images.celebrate} alt={topNews[0].title} />
+                <div className="story-overlay">
+                  <span className="category">{topNews[0].category}</span>
+                  <h3>{topNews[0].title}</h3>
+                  <p>{topNews[0].excerpt}</p>
+                </div>
+              </article>
+              {topNews.slice(1).map((story, i) => (
+                <article key={story.id} className={i === 0 ? "side-story" : "side-story side-story--dark"}>
+                  <div className={i === 1 ? "side-story-content" : ""}>
+                    <span className="category">{story.category}</span>
+                    <h3>{story.title}</h3>
+                    <small>{story.date}</small>
+                  </div>
+                  {story.image && <img src={story.image} alt={story.title} />}
+                </article>
+              ))}
+            </>
+          ) : (
+            <InterfaceState title="NO NEWS AVAILABLE" body="Editorial content will appear here soon." />
+          )}
         </div>
         <div className="story-rail">
-          {[
-            ["TRAINING", "THE FINAL SESSION BEFORE MATCHDAY"],
-            ["CLUB", "A SINGLE IDENTITY ACROSS THREE TEAMS"],
-            ["COMMUNITY", "FOOTBALL WHERE WE LIVE"],
-          ].map(([cat, title], i) => <article key={title}><b>0{i + 4}</b><span className="category">{cat}</span><h4>{title}</h4><Arrow /></article>)}
+          {news.slice(3, 6).map((story, i) => (
+            <article key={story.id} onClick={() => setPage("article")}>
+              <b>0{i + 4}</b><span className="category">{story.category}</span><h4>{story.title}</h4><Arrow />
+            </article>
+          ))}
         </div>
       </section>
 
@@ -333,16 +385,12 @@ function Home({ setPage }: { setPage: (page: Page) => void }) {
           <div>{["ALL", "UNITED", "MEN", "LADIES"].map((f) => <button key={f} className={fixtureFilter === f ? "active" : ""} onClick={() => setFixtureFilter(f)}>{f}</button>)}</div>
           <div><button className="active">UPCOMING</button><button>RESULTS</button></div>
         </div>
-        <div className="month">UPCOMING / SCHEDULE <span>CMS-MANAGED</span></div>
-        {[
-          ["DATE TBC", "—", "MPHEHLI UNITED", "OPPONENT TBC", "VENUE TBC", "STATUS TBC"],
-          ["DATE TBC", "—", "MPHEHLI ALL STARS MEN", "OPPONENT TBC", "VENUE TBC", "STATUS TBC"],
-          ["DATE TBC", "—", "MPHEHLI ALL STARS LADIES", "OPPONENT TBC", "VENUE TBC", "STATUS TBC"],
-        ].map((f, i) => (
-          <div className="fixture-row" key={f[0]}>
-            <span className="fixture-index">0{i + 1}</span><b>{f[0]}<small>SATURDAY</small></b><strong>{f[1]}</strong>
-            <div className="fixture-teams"><span>{f[2]}</span><em>VS</em><span>{f[3]}</span></div>
-            <span>{f[4]}<small>{f[5]}</small></span><button onClick={() => setPage("match")}>MATCH CENTRE <Arrow /></button>
+        <div className="month">UPCOMING / SCHEDULE</div>
+        {fixtures.filter(f => (fixtureFilter === "ALL" || f.teamSlug === fixtureFilter.toLowerCase())).slice(0, 3).map((f, i) => (
+          <div className="fixture-row" key={f.id}>
+            <span className="fixture-index">0{i + 1}</span><b>{f.date}<small>{f.day || "SATURDAY"}</small></b><strong>{f.score || "—"}</strong>
+            <div className="fixture-teams"><span className="uppercase">{f.homeTeam}</span><em>VS</em><span className="uppercase">{f.awayTeam}</span></div>
+            <span>{f.venue}<small>{f.status}</small></span><button onClick={() => setPage("match")}>MATCH CENTRE <Arrow /></button>
           </div>
         ))}
       </section>
@@ -350,7 +398,7 @@ function Home({ setPage }: { setPage: (page: Page) => void }) {
       <section className="team-spotlight" style={{ backgroundImage: `url(${images.action})` }}>
         <div className="team-spotlight__block">
           <span className="eyebrow">TEAM 01 / BLUE</span>
-          <h2>MPHEHLI<br />UNITED</h2>
+          <h2 className="uppercase">MPHEHLI UNITED</h2>
           <p>ABC MOTSEPE LEAGUE<br />NORTH WEST · STREAM A</p>
           <LinkButton inverse onClick={() => setPage("united")}>ENTER TEAM</LinkButton>
         </div>
@@ -362,7 +410,7 @@ function Home({ setPage }: { setPage: (page: Page) => void }) {
         <div className="player-image"><img src={images.portrait} alt="Featured football player on the pitch" /></div>
         <div className="player-copy">
           <span className="eyebrow">PLAYER FOCUS / FORWARD</span>
-          <h2>PLAYER<br />NAME</h2>
+          <h2 className="uppercase">PLAYER<br />NAME</h2>
           <p>MPHEHLI UNITED</p>
           <div className="placeholder-stats">
             {["APPEARANCES", "GOALS", "ASSISTS", "MINUTES"].map((s) => <span key={s}><b>—</b><small>{s}</small></span>)}
@@ -374,18 +422,24 @@ function Home({ setPage }: { setPage: (page: Page) => void }) {
       <section className="results-table section">
         <div className="latest-result">
           <span className="eyebrow">LATEST RESULT</span>
-          <h2>A STATEMENT<br />AT HOME.</h2>
-          <div className="result-numbers"><b>5</b><em>—</em><b>0</b></div>
-          <div className="result-names"><span>MPHEHLI UNITED</span><span>MOGOPELA WONDEROUS</span></div>
-          <p>FULL TIME · IKAGENG STADIUM</p>
+          <h2 className="uppercase">A STATEMENT<br />AT HOME.</h2>
+          <div className="result-numbers"><b>{heroMatch?.homeScore || "0"}</b><em>—</em><b>{heroMatch?.awayScore || "0"}</b></div>
+          <div className="result-names"><span className="uppercase">{heroMatch?.homeTeam || "HOME"}</span><span className="uppercase">{heroMatch?.awayTeam || "AWAY"}</span></div>
+          <p className="uppercase">FULL TIME · {heroMatch?.venue || "STADIUM TBC"}</p>
         </div>
         <div className="table-wrap">
-          <div className="table-title"><span className="eyebrow">LEAGUE TABLE</span><b>ABC MOTSEPE LEAGUE — STREAM A</b></div>
+          <div className="table-title"><span className="eyebrow">LEAGUE TABLE</span><b className="uppercase">{standings?.league || "ABC MOTSEPE LEAGUE — STREAM A"}</b></div>
           <div className="league-table">
             <div className="table-row table-header"><span>POS</span><span>TEAM</span><span>P</span><span>W</span><span>D</span><span>L</span><span>GD</span><span>PTS</span></div>
-            <div className="table-row highlight">{["—", "MPHEHLI UNITED", "—", "—", "—", "—", "—", "—"].map((v, j) => <span key={j}>{v}</span>)}</div>
+            {standings?.rows ? (
+              standings.rows.map((row: any, j: number) => (
+                <div className="table-row" key={j}>{row.map((v: any, k: number) => <span key={k}>{v}</span>)}</div>
+              ))
+            ) : (
+              <div className="table-row highlight">{["—", "MPHEHLI UNITED", "—", "—", "—", "—", "—", "—"].map((v, j) => <span key={j}>{v}</span>)}</div>
+            )}
           </div>
-          <small className="data-note">Official competition standings pending.</small>
+          <small className="data-note">Official competition standings updated in real-time.</small>
           <LinkButton>FULL TABLE</LinkButton>
         </div>
       </section>
@@ -402,11 +456,11 @@ function Home({ setPage }: { setPage: (page: Page) => void }) {
       <section className="club-story">
         <div className="club-story__copy">
           <span className="eyebrow">OUR CLUB</span>
-          <h2>ONE CREST.<br />THREE TEAMS.<br />ONE FUTURE.</h2>
+          <h2 className="uppercase">ONE CREST.<br />THREE TEAMS.<br />ONE FUTURE.</h2>
           <p>Mphehli All Stars is building a football institution rooted in people, place and ambition. Our story is still being written — on the pitch and beyond it.</p>
           <LinkButton inverse>DISCOVER THE CLUB</LinkButton>
         </div>
-        <div className="club-story__image"><img src={images.hero} alt="Footballers competing under stadium lights" /><span>MPHEHLI<br />ALL STARS</span></div>
+        <div className="club-story__image"><img src={images.hero} alt="Footballers competing under stadium lights" /><span className="uppercase">MPHEHLI<br />ALL STARS</span></div>
       </section>
 
       <section className="history section">
@@ -419,53 +473,298 @@ function Home({ setPage }: { setPage: (page: Page) => void }) {
       </section>
 
       <section className="community" style={{ backgroundImage: `url(${images.community})` }}>
-        <div><span className="eyebrow">BEYOND 90 MINUTES</span><h2>FOOTBALL<br />BELONGS TO<br />EVERYONE.</h2><p>Our club lives in its community. On the training ground, in the stands and wherever the next generation finds the game.</p><LinkButton inverse>OUR COMMUNITY</LinkButton></div>
+        <div><span className="eyebrow">BEYOND 90 MINUTES</span><h2 className="uppercase">FOOTBALL<br />BELONGS TO<br />EVERYONE.</h2><p>Our club lives in its community. On the training ground, in the stands and wherever the next generation finds the game.</p><LinkButton inverse>OUR COMMUNITY</LinkButton></div>
       </section>
     </main>
   );
 }
 
 function TeamPage({ setPage, theme = "united" }: { setPage: (page: Page) => void; theme?: "united" | "men" | "ladies" }) {
-  const team = {
-    united: { name: "MPHEHLI UNITED", short: "UNITED", identity: "TEAM 01 / BLUE", competition: "ABC MOTSEPE LEAGUE · NORTH WEST · STREAM A", image: images.action },
-    men: { name: "MPHEHLI ALL STARS MEN", short: "ALL STARS MEN", identity: "TEAM 02 / RED", competition: "REGIONAL LEAGUE · GAUTENG · JOHANNESBURG BLUE STREAM", image: images.huddle },
-    ladies: { name: "MPHEHLI ALL STARS LADIES", short: "ALL STARS LADIES", identity: "TEAM 03 / RED + WHITE", competition: "SASOL LEAGUE · KWAZULU-NATAL", image: images.ladies },
-  }[theme];
+  const [teamData, setTeamData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadTeam() {
+      try {
+        const data = await api.getTeamBySlug(theme);
+        setTeamData(data);
+      } catch (e) {
+        console.error("Error loading team", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadTeam();
+  }, [theme]);
+
+  if (loading) return <div className="h-screen w-full flex items-center justify-center bg-slate-50 text-slate-400 font-bold uppercase tracking-widest">Loading Team...</div>;
+  if (!teamData) return <div className="h-screen w-full flex items-center justify-center bg-slate-50 text-slate-400 font-bold uppercase tracking-widest">Team Not Found</div>;
+
+  const { name, short, identity, competition, image } = teamData;
+
   return (
     <main className={`team-page team-page--${theme}`}>
-      <section className="sub-hero" style={{ backgroundImage: `url(${team.image})` }}>
-        <div><span className="eyebrow">{team.identity}</span><h1>{team.name}</h1><p>{team.competition}</p></div>
+      <section className="sub-hero" style={{ backgroundImage: `url(${image || images.action})` }}>
+        <div><span className="eyebrow">{identity}</span><h1 className="uppercase">{name}</h1><p>{competition}</p></div>
       </section>
-      <nav className="team-subnav"><b>{team.short}</b>{["HOME", "FIXTURES", "RESULTS", "TABLE", "SQUAD", "STAFF", "NEWS", "MEDIA"].map((n) => <button key={n} onClick={() => n === "SQUAD" ? setPage("squad") : n === "STAFF" ? setPage("staff") : undefined}>{n}</button>)}</nav>
+      <nav className="team-subnav"><b className="uppercase">{short}</b>{["HOME", "FIXTURES", "RESULTS", "TABLE", "SQUAD", "STAFF", "NEWS", "MEDIA"].map((n) => <button key={n} onClick={() => n === "SQUAD" ? setPage("squad") : n === "STAFF" ? setPage("staff") : undefined}>{n}</button>)}</nav>
       <section className="team-dashboard section">
-        <SectionHead eyebrow={`${team.short} / CURRENT`} title={`${team.short} ENVIRONMENT`} />
+        <SectionHead eyebrow={`${short} / CURRENT`} title={`${short} ENVIRONMENT`} />
         <div className="team-match-grid">
-          <div className="blue-panel"><span className="eyebrow">NEXT MATCH</span><h3>FIXTURE<br /><b>—</b></h3><p>{team.short} <i>VS</i> OPPONENT</p><small>CMS-MANAGED FIXTURE INFORMATION</small><br /><br /><LinkButton inverse onClick={() => setPage("fixtures")}>VIEW FIXTURES</LinkButton></div>
+          <div className="blue-panel"><span className="eyebrow">NEXT MATCH</span><h3>FIXTURE<br /><b>—</b></h3><p>{short} <i>VS</i> OPPONENT</p><small>CMS-MANAGED FIXTURE INFORMATION</small><br /><br /><LinkButton inverse onClick={() => setPage("fixtures")}>VIEW FIXTURES</LinkButton></div>
           <div className="result-panel"><span className="eyebrow">LATEST RESULT</span>{theme === "united" ? <><div><b>5</b><em>—</em><b>0</b></div><p>UNITED · FULL TIME · WONDEROUS</p><LinkButton onClick={() => setPage("match")}>MATCH CENTRE</LinkButton></> : <div className="empty-result"><b>—</b><p>NO VERIFIED RESULT AVAILABLE</p></div>}</div>
         </div>
       </section>
-      <section className="team-news section"><SectionHead eyebrow="FROM THE TEAM" title={`${team.short} NEWS`} action="ALL TEAM NEWS" /><div className="editorial-grid"><article className="lead-story"><img src={team.image} alt={`${team.name} football team`} /><div className="story-overlay"><span className="category">TEAM NEWS</span><h3>THE LATEST FROM {team.short}</h3></div></article><article className="side-story"><img src={images.training} alt="Players during a match" /><div><span className="category">TRAINING</span><h3>PREPARATION / STORY PLACEHOLDER</h3></div></article></div></section>
-      <section className="squad-callout"><span>THE TEAM</span><h2>MEET<br />{team.short}.</h2><p>PLAYERS · STAFF · FIXTURES · MEDIA</p><LinkButton inverse onClick={() => setPage("squad")}>VIEW SQUAD</LinkButton></section>
+      <section className="team-news section"><SectionHead eyebrow="FROM THE TEAM" title={`${short} NEWS`} action="ALL TEAM NEWS" /><div className="editorial-grid"><article className="lead-story"><img src={image || images.training} alt={`${name} football team`} /><div className="story-overlay"><span className="category">TEAM NEWS</span><h3>THE LATEST FROM {short}</h3></div></article><article className="side-story"><img src={images.training} alt="Players during a match" /><div><span className="category">TRAINING</span><h3>PREPARATION / STORY PLACEHOLDER</h3></div></article></div></section>
+      <section className="squad-callout"><span>THE TEAM</span><h2 className="uppercase">MEET {short}.</h2><p>PLAYERS · STAFF · FIXTURES · MEDIA</p><LinkButton inverse onClick={() => setPage("squad")}>VIEW SQUAD</LinkButton></section>
     </main>
   );
 }
 
-function SquadPage({ setPage }: { setPage: (page: Page) => void }) {
+function SquadPage({ setPage, theme = "united" }: { setPage: (page: Page) => void; theme?: string }) {
+  const [players, setPlayers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadSquad() {
+      try {
+        const data = await api.getPlayers({ teamSlug: theme });
+        setPlayers(data);
+      } catch (e) {
+        console.error("Error loading squad", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadSquad();
+  }, [theme]);
+
+  if (loading) return <div className="h-screen w-full flex items-center justify-center bg-slate-50 text-slate-400 font-bold uppercase tracking-widest">Loading Squad...</div>;
+  if (!players || players.length === 0) return <div className="h-screen w-full flex items-center justify-center bg-slate-50 text-slate-400 font-bold uppercase tracking-widest">No Players Found</div>;
+
   const groups = ["GOALKEEPERS", "DEFENDERS", "MIDFIELDERS", "FORWARDS"];
-  return <main className="squad-page"><div className="page-intro blue-intro"><span className="eyebrow">MPHEHLI UNITED / 2026–27</span><h1>THE SQUAD</h1><p>ONE TEAM. EVERY ROLE. THE SAME STANDARD.</p></div>{groups.map((group, gi) => <section className="squad-group section" key={group}><div className="group-title"><span>0{gi + 1}</span><h2>{group}</h2></div><div className="players">{[0, 1, 2].map((p) => <button className="player-tile" key={p} onClick={() => setPage("player")}><img src={[images.portrait, images.training, images.action][p]} alt="Player placeholder portrait" /><span className="tile-number">{String(gi * 3 + p + 1).padStart(2, "0")}</span><div><b>PLAYER NAME</b><small>{group.slice(0, -1)}</small></div></button>)}</div></section>)}</main>;
+
+  return (
+    <main className="squad-page">
+      <div className="page-intro blue-intro">
+        <span className="eyebrow">{theme.toUpperCase().replace("-", " ") || "MPHEHLI UNITED"} / 2026–27</span>
+        <h1 className="uppercase">THE SQUAD</h1>
+        <p>ONE TEAM. EVERY ROLE. THE SAME STANDARD.</p>
+      </div>
+      {groups.map((group, gi) => {
+        const groupPlayers = players.filter(p => p.position === group);
+        return (
+          <section className="squad-group section" key={group}>
+            <div className="group-title">
+              <span>0{gi + 1}</span>
+              <h2 className="uppercase">{group}</h2>
+            </div>
+            <div className="players">
+              {groupPlayers.length > 0 ? (
+                groupPlayers.map((player) => (
+                  <button className="player-tile" key={player.id} onClick={() => setPage("player")}>
+                    <img src={player.image || images.portrait} alt={player.name} />
+                    <span className="tile-number">{player.number || "00"}</span>
+                    <div className="uppercase">
+                      <b>{player.name}</b>
+                      <small>{group.slice(0, -1)}</small>
+                    </div>
+                  </button>
+                ))
+              ) : (
+                <div className="no-players">No {group.toLowerCase()} listed.</div>
+              )}
+            </div>
+          </section>
+        );
+      })}
+    </main>
+  );
 }
 
-function PlayerPage() {
-  return <main className="profile-page"><section className="profile-hero"><div className="profile-big-number">09</div><img src={images.portrait} alt="Football player profile placeholder" /><div className="profile-title"><span className="eyebrow">MPHEHLI UNITED / FORWARD</span><h1>PLAYER<br />NAME</h1><p>PROFILE INFORMATION TO BE CONFIRMED</p></div></section><section className="profile-stats">{["APPEARANCES", "STARTS", "MINUTES", "GOALS", "ASSISTS", "CARDS"].map(s => <div key={s}><b>—</b><span>{s}</span></div>)}</section><section className="profile-body section"><div><span className="eyebrow">THE PLAYER</span><h2>BIOGRAPHY</h2></div><div><p>Verified player biography and career information will appear here when supplied by the club.</p><div className="career-row"><b>CAREER</b><span>SEASON</span><span>CLUB</span><span>APPS</span></div></div></section></main>;
+function PlayerPage({ setPage }: { setPage: (page: Page) => void }) {
+  const [player, setPlayer] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadPlayer() {
+      try {
+        // In a real app, we'd get the ID from the URL. For now, we fetch the first player or a specific one.
+        const players = await api.getPlayers();
+        if (players && players.length > 0) {
+          setPlayer(players[0]);
+        }
+      } catch (e) {
+        console.error("Error loading player", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadPlayer();
+  }, []);
+
+  if (loading) return <div className="h-screen w-full flex items-center justify-center bg-slate-50 text-slate-400 font-bold uppercase tracking-widest">Loading Profile...</div>;
+  if (!player) return <div className="h-screen w-full flex items-center justify-center bg-slate-50 text-slate-400 font-bold uppercase tracking-widest">Player Not Found</div>;
+
+  return (
+    <main className="profile-page">
+      <section className="profile-hero">
+        <div className="profile-big-number">{player.number || "00"}</div>
+        <img src={player.image || images.portrait} alt={player.name} />
+        <div className="profile-title">
+          <span className="eyebrow">{player.teamSlug?.toUpperCase().replace("-", " ") || "MPHEHLI UNITED"} / {player.position}</span>
+          <h1>{player.name.toUpperCase()}</h1>
+          <p>{player.biography || "PROFILE INFORMATION TO BE CONFIRMED"}</p>
+        </div>
+      </section>
+      <section className="profile-stats">
+        {[
+          { label: "APPEARANCES", value: player.stats?.appearances || "—" },
+          { label: "STARTS", value: player.stats?.starts || "—" },
+          { label: "MINUTES", value: player.stats?.minutes || "—" },
+          { label: "GOALS", value: player.stats?.goals || "—" },
+          { label: "ASSISTS", value: player.stats?.assists || "—" },
+          { label: "CARDS", value: player.stats?.cards || "—" },
+        ].map(s => <div key={s.label}><b>{s.value}</b><span>{s.label}</span></div>)}
+      </section>
+      <section className="profile-body section">
+        <div><span className="eyebrow">THE PLAYER</span><h2>BIOGRAPHY</h2></div>
+        <div>
+          <p>{player.biography || "Verified player biography and career information will appear here when supplied by the club."}</p>
+          <div className="career-row"><b>CAREER</b><span>SEASON</span><span>CLUB</span><span>APPS</span></div>
+        </div>
+      </section>
+    </main>
+  );
 }
 
-function MatchPage() {
+function MatchPage({ setPage }: { setPage: (page: Page) => void }) {
   const [tab, setTab] = useState("OVERVIEW");
-  return <main className="match-page"><section className="match-centre-head"><span className="eyebrow">ABC MOTSEPE LEAGUE / MATCHDAY</span><MatchLockup /><p>FULL TIME · 26 SEPTEMBER 2026 · IKAGENG STADIUM</p></section><nav className="match-tabs">{["OVERVIEW", "LINEUPS", "TIMELINE", "STATS", "MATCH REPORT", "MEDIA"].map(x => <button className={tab === x ? "active" : ""} onClick={() => setTab(x)} key={x}>{x}</button>)}</nav><section className="match-overview section"><div className="match-report-lead"><span className="eyebrow">{tab}</span><h1>{tab === "OVERVIEW" ? <>UNITED MAKE<br />THEIR MARK.</> : `${tab} / MATCH DATA`}</h1>{tab === "OVERVIEW" ? <><p>A five-goal result at Ikageng Stadium. Verified editorial reporting can be published here by the club.</p><img src={images.celebrate} alt="Football team celebrates on the pitch" /></> : <InterfaceState title={`NO ${tab} DATA`} body="This panel only appears when verified match data is supplied by the club." />}</div><aside><span className="eyebrow">MATCH INFORMATION</span><div className="timeline-event"><b>FT</b><span><strong>FULL TIME</strong><small>FINAL SCORE CONFIRMED</small></span></div><div className="timeline-event"><b>26</b><span><strong>SEPTEMBER 2026</strong><small>IKAGENG STADIUM · 15:00</small></span></div><InterfaceState title="TIMELINE PENDING" body="No event-by-event data has been supplied." compact /></aside></section></main>;
+  const [match, setMatch] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadMatch() {
+      try {
+        // Real app would use ID from URL. Using a placeholder ID for now.
+        const data = await api.getFixtures(); // Using fixtures to find a match for now
+        if (data && data.length > 0) {
+          setMatch(data[0]);
+        }
+      } catch (e) {
+        console.error("Error loading match", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadMatch();
+  }, []);
+
+  if (loading) return <div className="h-screen w-full flex items-center justify-center bg-slate-50 text-slate-400 font-bold uppercase tracking-widest">Loading Match...</div>;
+  if (!match) return <div className="h-screen w-full flex items-center justify-center bg-slate-50 text-slate-400 font-bold uppercase tracking-widest">Match Not Found</div>;
+
+  return (
+    <main className="match-page">
+      <section className="match-centre-head">
+        <span className="eyebrow">{match.competition || "ABC MOTSEPE LEAGUE"} / MATCHDAY</span>
+        <div className="match-lockup">
+          <div className="match-team">
+            <Crest light />
+            <strong className="uppercase">{match.homeTeam}</strong>
+          </div>
+          <div className="match-score">
+            <span>{match.homeScore || "0"}</span><em>—</em><span>{match.awayScore || "0"}</span>
+          </div>
+          <div className="match-team match-team--away">
+            <div className="opponent-crest">{match.awayTeam?.charAt(0) || "O"}</div>
+            <strong className="uppercase">{match.awayTeam}</strong>
+          </div>
+        </div>
+        <p className="uppercase">{match.date} · {match.venue}</p>
+      </section>
+      <nav className="match-tabs">
+        {["OVERVIEW", "LINEUPS", "TIMELINE", "STATS", "MATCH REPORT", "MEDIA"].map(x => <button className={tab === x ? "active" : ""} onClick={() => setTab(x)} key={x}>{x}</button>)}
+      </nav>
+      <section className="match-overview section">
+        <div className="match-report-lead">
+          <span className="eyebrow">{tab}</span>
+          <h1>{tab === "OVERVIEW" ? <>UNITED MAKE<br />THEIR MARK.</> : `${tab} / MATCH DATA`}</h1>
+          {tab === "OVERVIEW" ? (
+            <>
+              <p>{match.summary || "A result at the stadium. Verified editorial reporting can be published here by the club."}</p>
+              <img src={images.celebrate} alt="Football team celebrates on the pitch" />
+            </>
+          ) : (
+            <InterfaceState title={`NO ${tab} DATA`} body="This panel only appears when verified match data is supplied by the club." />
+          )}
+        </div>
+        <aside>
+          <span className="eyebrow">MATCH INFORMATION</span>
+          <div className="timeline-event"><b>FT</b><span><strong>FULL TIME</strong><small>FINAL SCORE CONFIRMED</small></span></div>
+          <div className="timeline-event"><b>{match.date.split(' ')[0] || "26"}</b><span><strong className="uppercase">{match.date}</strong><small>{match.venue}</small></span></div>
+          <InterfaceState title="TIMELINE PENDING" body="No event-by-event data has been supplied." compact />
+        </aside>
+      </section>
+    </main>
+  );
 }
 
-function ArticlePage() {
-  return <main className="article-page"><section className="article-hero"><img src={images.celebrate} alt="Players celebrating a win together" /><div><span className="category">MATCH REPORT</span><h1>FIVE-STAR UNITED<br />SET THE STANDARD</h1><p>26 SEPTEMBER 2026 · MPHEHLI ALL STARS MEDIA</p></div></section><article className="article-body"><aside><b>SHARE</b><span>IG</span><span>FB</span><span>X</span></aside><div><p className="standfirst">Mphehli United recorded a 5–0 full-time result against Mogopela Wonderous at Ikageng Stadium.</p><p>This article layout is ready for verified reporting, player quotes and confirmed match detail from the club's editorial team. It is intentionally structured as a professional match report rather than a promotional post.</p><blockquote>VERIFIED MATCH QUOTE WILL APPEAR HERE.<small>— QUOTE PLACEHOLDER</small></blockquote><h2>THE STORY OF THE MATCH</h2><p>Full editorial copy will be added once approved match information is supplied. Photography remains central to the reading experience.</p><img src={images.action} alt="Football action during a competitive match" /></div></article></main>;
+function ArticlePage({ setPage }: { setPage: (page: Page) => void }) {
+  const [article, setArticle] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadArticle() {
+      try {
+        // In a real app, we'd get the ID from the URL.
+        // For now, we fetch the first news item to demonstrate the dynamic layout.
+        const news = await api.getNews();
+        if (news && news.length > 0) {
+          setArticle(news[0]);
+        }
+      } catch (e) {
+        console.error("Error loading article", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadArticle();
+  }, []);
+
+  if (loading) return <div className="h-screen w-full flex items-center justify-center bg-slate-50 text-slate-400 font-bold uppercase tracking-widest">Loading Article...</div>;
+  if (!article) return <div className="h-screen w-full flex items-center justify-center bg-slate-50 text-slate-400 font-bold uppercase tracking-widest">Article Not Found</div>;
+
+  return (
+    <main className="article-page">
+      <section className="article-hero">
+        <img src={article.image || images.celebrate} alt={article.title} />
+        <div>
+          <span className="category">{article.category}</span>
+          <h1 className="uppercase">{article.title}</h1>
+          <p>{article.date} · MPHEHLI ALL STARS MEDIA</p>
+        </div>
+      </section>
+      <article className="article-body">
+        <aside>
+          <b>SHARE</b>
+          <span>IG</span>
+          <span>FB</span>
+          <span>X</span>
+        </aside>
+        <div>
+          <p className="standfirst">{article.excerpt}</p>
+          <div className="article-content">
+            {article.content ? (
+              <div dangerouslySetInnerHTML={{ __html: article.content }} />
+            ) : (
+              <p>Verified editorial content will be published here once supplied by the club newsroom.</p>
+            )}
+          </div>
+          {article.image && <img src={article.image} alt={article.title} className="article-image" />}
+        </div>
+      </article>
+    </main>
+  );
 }
 
 function InterfaceState({ title, body, compact = false }: { title: string; body: string; compact?: boolean }) {
@@ -495,8 +794,70 @@ function FilterBar({ result = false }: { result?: boolean }) {
 }
 
 function FixturesPage({ mode, setPage }: { mode: "fixtures" | "results"; setPage: (page: Page) => void }) {
+  const [fixtures, setFixtures] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const isResult = mode === "results";
-  return <main><PageHero eyebrow="MATCHES / 2026–27" title={isResult ? "RESULTS" : "FIXTURES"} copy={isResult ? "The official match archive." : "Every team. Every competition. Every matchday."} /><section className="archive section"><FilterBar result={isResult} /><div className="archive-month"><span>{isResult ? "SEPTEMBER 2026" : "UPCOMING"}</span><small>{isResult ? "1 COMPLETED MATCH" : "SCHEDULE PENDING"}</small></div>{isResult ? <div className="result-archive-row"><div><span>26 SEP</span><small>ABC MOTSEPE LEAGUE</small></div><strong>MPHEHLI UNITED</strong><b>5</b><em>—</em><b>0</b><strong>MOGOPELA WONDEROUS</strong><div><span>FULL TIME</span><small>IKAGENG STADIUM</small></div><button onClick={() => setPage("match")}>MATCH CENTRE <Arrow /></button></div> : <><InterfaceState title="FIXTURE SCHEDULE PENDING" body="Upcoming fixtures will populate chronologically when published by the club." /><div className="fixture-blueprint"><span>DATE / TIME</span><span>COMPETITION</span><span>HOME TEAM</span><span>VS</span><span>AWAY TEAM</span><span>VENUE / STATUS</span></div></>}</section></main>;
+
+  useEffect(() => {
+    async function loadFixtures() {
+      try {
+        const data = await api.getFixtures({ status: isResult ? "COMPLETED" : "SCHEDULED" });
+        setFixtures(data);
+      } catch (e) {
+        console.error("Error loading fixtures", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadFixtures();
+  }, [mode]);
+
+  if (loading) return <div className="h-screen w-full flex items-center justify-center bg-slate-50 text-slate-400 font-bold uppercase tracking-widest">Loading Matches...</div>;
+  if (!fixtures || fixtures.length === 0) return <div className="h-screen w-full flex items-center justify-center bg-slate-50 text-slate-400 font-bold uppercase tracking-widest">No Matches Found</div>;
+
+  return (
+    <main>
+      <PageHero eyebrow="MATCHES / 2026–27" title={isResult ? "RESULTS" : "FIXTURES"} copy={isResult ? "The official match archive." : "Every team. Every competition. Every matchday."} />
+      <section className="archive section">
+        <FilterBar result={isResult} />
+        <div className="archive-month">
+          <span>{isResult ? "SEASON ARCHIVE" : "UPCOMING SCHEDULE"}</span>
+          <small>{fixtures.length} MATCHES FOUND</small>
+        </div>
+        {isResult ? (
+          <div className="results-list">
+            {fixtures.map((f, i) => (
+              <div className="result-archive-row" key={f.id}>
+                <div><span>{f.date}</span><small className="uppercase">{f.competition}</small></div>
+                <strong className="uppercase">{f.homeTeam}</strong>
+                <b className="score">{f.homeScore}</b><em>—</em><b className="score">{f.awayScore}</b>
+                <strong className="uppercase">{f.awayTeam}</strong>
+                <div><span className="uppercase">{f.status}</span><small>{f.venue}</small></div>
+                <button onClick={() => setPage("match")}>MATCH CENTRE <Arrow /></button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="fixtures-list">
+            {fixtures.map((f, i) => (
+              <div className="fixture-rowed" key={f.id}>
+                <span className="fixture-index">0{i + 1}</span>
+                <b>{f.date}<small>{f.day || "TBC"}</small></b>
+                <strong className="score-placeholder">{f.score || "—"}</strong>
+                <div className="fixture-teams">
+                  <span className="uppercase">{f.homeTeam}</span>
+                  <em>VS</em>
+                  <span className="uppercase">{f.awayTeam}</span>
+                </div>
+                <span>{f.venue}<small>{f.status}</small></span>
+                <button onClick={() => setPage("match")}>MATCH CENTRE <Arrow /></button>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+    </main>
+  );
 }
 
 function TablesPage() {
@@ -504,13 +865,120 @@ function TablesPage() {
 }
 
 function Newsroom({ setPage }: { setPage: (page: Page) => void }) {
-  return <main><PageHero eyebrow="OFFICIAL CLUB EDITORIAL" title="NEWSROOM" copy="Reporting from every team and every part of the club." /><section className="newsroom section"><div className="news-categories">{["LATEST","MATCH REPORTS","TEAM NEWS","TRAINING","FEATURES","PLAYERS","CLUB","COMMUNITY"].map((x, i) => <button className={i === 0 ? "active" : ""} key={x}>{x}</button>)}</div><div className="news-lead" onClick={() => setPage("article")}><img src={images.celebrate} alt="Football players celebrating" /><div><span className="category">MATCH REPORT</span><h2>FIVE-STAR UNITED SET THE STANDARD</h2><p>26 SEPTEMBER 2026</p></div></div><div className="news-stream">{[[images.ladies,"LADIES","THE LATEST FROM THE TRAINING GROUND"],[images.huddle,"TEAM NEWS","TOGETHER BEFORE THE NEXT NINETY"],[images.community,"COMMUNITY","THE GAME, WHERE WE LIVE"]].map(([image, cat, title]) => <article key={title}><img src={image} alt="" /><span className="category">{cat}</span><h3>{title}</h3><p>Editorial content managed by the club newsroom.</p><Arrow /></article>)}</div></section></main>;
+  const [news, setNews] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState("LATEST");
+
+  useEffect(() => {
+    async function loadNews() {
+      try {
+        const data = await api.getNews();
+        setNews(data);
+      } catch (e) {
+        console.error("Error loading news", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadNews();
+  }, []);
+
+  if (loading) return <div className="h-screen w-full flex items-center justify-center bg-slate-50 text-slate-400 font-bold uppercase tracking-widest">Loading Newsroom...</div>;
+  if (!news || news.length === 0) return <div className="h-screen w-full flex items-center justify-center bg-slate-50 text-slate-400 font-bold uppercase tracking-widest">No News Available</div>;
+
+  const filteredNews = filter === "LATEST" ? news : news.filter(n => n.category === filter);
+
+  return (
+    <main>
+      <PageHero eyebrow="OFFICIAL CLUB EDITORIAL" title="NEWSROOM" copy="Reporting from every team and every part of the club." />
+      <section className="newsroom section">
+        <div className="news-categories">
+          {["LATEST", "MATCH REPORTS", "TEAM NEWS", "TRAINING", "FEATURES", "PLAYERS", "CLUB", "COMMUNITY"].map((x) => (
+            <button key={x} className={filter === x ? "active" : ""} onClick={() => setFilter(x)}>{x}</button>
+          ))}
+        </div>
+        {filteredNews.length > 0 ? (
+          <>
+            <div className="news-lead" onClick={() => setPage("article")}>
+              <img src={filteredNews[0].image || images.celebrate} alt={filteredNews[0].title} />
+              <div className="story-overlay">
+                <span className="category">{filteredNews[0].category}</span>
+                <h2 className="uppercase">{filteredNews[0].title}</h2>
+                <p>{filteredNews[0].date}</p>
+              </div>
+            </div>
+            <div className="news-stream">
+              {filteredNews.slice(1).map((story) => (
+                <article key={story.id} onClick={() => setPage("article")}>
+                  <img src={story.image || images.huddle} alt={story.title} />
+                  <span className="category">{story.category}</span>
+                  <h3 className="uppercase">{story.title}</h3>
+                  <p>{story.excerpt || "Editorial content managed by the club newsroom."}</p>
+                  <Arrow />
+                </article>
+              ))}
+            </div>
+          </>
+        ) : (
+          <InterfaceState title="NO ARTICLES FOUND" body={`No news available in the ${filter} category.`} />
+        )}
+      </section>
+    </main>
+  );
 }
 
-function MediaArchive() {
+function MediaArchive({ setPage }: { setPage: (page: Page) => void }) {
+  const [media, setMedia] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<string | null>(null);
-  const gallery = [images.training, images.women, images.huddle, images.action, images.community, images.celebrate];
-  return <main><PageHero eyebrow="PHOTOGRAPHY / VIDEO / ARCHIVE" title="MEDIA" copy="The visual record of the club." /><section className="archive section"><div className="news-categories">{["FEATURED","MATCHDAY","TRAINING","PLAYERS","UNITED","MEN","LADIES","COMMUNITY","HISTORICAL"].map((x, i) => <button className={i === 0 ? "active" : ""} key={x}>{x}</button>)}</div><div className="masonry-gallery">{gallery.map((src, i) => <button onClick={() => setSelected(src)} key={src} className={i === 0 ? "wide" : ""}><img src={src} alt="Club media archive placeholder" /><span>VIEW IMAGE 0{i + 1} ↗</span></button>)}</div></section>{selected && <div className="lightbox" role="dialog" aria-modal="true" aria-label="Media lightbox"><button onClick={() => setSelected(null)}>CLOSE ×</button><img src={selected} alt="Selected club archive photograph" /><div><b>CLUB ARCHIVE / IMAGE</b><span>Caption and verified metadata supplied by the CMS.</span></div></div>}</main>;
+
+  useEffect(() => {
+    async function loadMedia() {
+      try {
+        const data = await api.getMedia();
+        setMedia(data);
+      } catch (e) {
+        console.error("Error loading media", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadMedia();
+  }, []);
+
+  if (loading) return <div className="h-screen w-full flex items-center justify-center bg-slate-50 text-slate-400 font-bold uppercase tracking-widest">Loading Media...</div>;
+  if (!media || media.length === 0) return <div className="h-screen w-full flex items-center justify-center bg-slate-50 text-slate-400 font-bold uppercase tracking-widest">No Media Found</div>;
+
+  return (
+    <main>
+      <PageHero eyebrow="PHOTOGRAPHY / VIDEO / ARCHIVE" title="MEDIA" copy="The visual record of the club." />
+      <section className="archive section">
+        <div className="news-categories">
+          {["FEATURED", "MATCHDAY", "TRAINING", "PLAYERS", "UNITED", "MEN", "LADIES", "COMMUNITY", "HISTORICAL"].map((x, i) => (
+            <button key={x} className={i === 0 ? "active" : ""}>{x}</button>
+          ))}
+        </div>
+        <div className="masonry-gallery">
+          {media.map((item, i) => (
+            <button onClick={() => setSelected(item.url)} key={item.id || i} className={i === 0 ? "wide" : ""}>
+              <img src={item.url || images.training} alt={item.caption || "Club media"} />
+              <span className="view-label">VIEW IMAGE 0{i + 1} ↗</span>
+            </button>
+          ))}
+        </div>
+      </section>
+      {selected && (
+        <div className="lightbox" role="dialog" aria-modal="true" aria-label="Media lightbox">
+          <button onClick={() => setSelected(null)}>CLOSE ×</button>
+          <img src={selected} alt="Selected club archive photograph" />
+          <div className="lightbox-info">
+            <b>CLUB ARCHIVE / IMAGE</b>
+            <span>Verified metadata supplied by the CMS.</span>
+          </div>
+        </div>
+      )}
+    </main>
+  );
 }
 
 function InstitutionalPage({ kind, setPage }: { kind: "club" | "history" | "honours" | "community" | "contact"; setPage: (page: Page) => void }) {
@@ -527,7 +995,7 @@ function SearchPage({ setPage }: { setPage: (page: Page) => void }) {
   return <main className="search-page"><section><span className="eyebrow">SEARCH THE CLUB</span><div className="search-field"><input autoFocus value={query} onChange={e => setQuery(e.target.value)} placeholder="TEAM, PLAYER, MATCH, STORY…" /><span>⌕</span></div><div className="search-tags">{["PLAYERS","TEAMS","MATCHES","NEWS","MEDIA","PAGES"].map(x => <button key={x}>{x}</button>)}</div></section><section className="search-results">{query ? <><p>{results.length} RESULTS FOR “{query.toUpperCase()}”</p>{results.map(r => <button key={r.title} onClick={() => setPage(r.page)}><small>{r.type}</small><b>{r.title}</b><Arrow /></button>)}</> : <InterfaceState title="START YOUR SEARCH" body="Search players, teams, matches, news, media and club pages." />}</section></main>;
 }
 
-function Footer({ setPage }: { setPage: (p: Page) => void }, settings: any) {
+function Footer({ setPage, settings }: { setPage: (p: Page) => void; settings: any }) {
   return <footer><div className="footer-top flex justify-between items-center"><Crest light /><p className="text-right">{settings?.slogan || "COMETH THE HOUR, COMETH THE MAN."}</p></div><div className="footer-links"><div><b>TEAMS</b><button onClick={() => setPage("united")}>MPHEHLI UNITED</button><button onClick={() => setPage("men")}>MPHEHLI ALL STARS MEN</button><button onClick={() => setPage("ladies")}>MPHEHLI ALL STARS LADIES</button></div><div><b>EXPLORE</b><button onClick={() => setPage("fixtures")}>FIXTURES</button><button onClick={() => setPage("results")}>RESULTS</button><button onClick={() => setPage("tables")}>TABLES</button><button onClick={() => setPage("news")}>NEWS</button><button onClick={() => setPage("media")}>MEDIA</button></div><div><b>CLUB</b><button onClick={() => setPage("club")}>ABOUT</button><button onClick={() => setPage("history")}>HISTORY</button><button onClick={() => setPage("honours")}>HONOURS</button><button onClick={() => setPage("community")}>COMMUNITY</button><button onClick={() => setPage("contact")}>CONTACT</button></div><div><b>FOLLOW THE CLUB</b><button>INSTAGRAM ↗</button><button>FACEBOOK ↗</button><button>YOUTUBE ↗</button></div></div><div className="footer-bottom"><span>© 2022—{new Date().getFullYear()} {settings?.clubName || "MPHEHLI ALL STARS"}</span><span>PRIVACY · TERMS · ACCESSIBILITY</span><span>SOUTH AFRICA</span></div></footer>;
 }
 
@@ -571,14 +1039,14 @@ export default function App() {
     {page === "ladies" && <TeamPage setPage={go} theme="ladies" />}
     {page === "squad" && <SquadPage setPage={go} />}
     {page === "staff" && <StaffPage />}
-    {page === "player" && <PlayerPage />}
+    {page === "player" && <PlayerPage setPage={go} />}
     {page === "fixtures" && <FixturesPage mode="fixtures" setPage={go} />}
     {page === "results" && <FixturesPage mode="results" setPage={go} />}
     {page === "tables" && <TablesPage />}
-    {page === "match" && <MatchPage />}
+    {page === "match" && <MatchPage setPage={go} />}
     {page === "news" && <Newsroom setPage={go} />}
-    {page === "article" && <ArticlePage />}
-    {page === "media" && <MediaArchive />}
+    {page === "article" && <ArticlePage setPage={go} />}
+    {page === "media" && <MediaArchive setPage={go} />}
     {(["club", "history", "honours", "community", "contact"] as Page[]).includes(page) && <InstitutionalPage kind={page as "club" | "history" | "honours" | "community" | "contact"} setPage={go} />}
     {page === "search" && <SearchPage setPage={go} />}
     <Footer setPage={go} settings={settings} />

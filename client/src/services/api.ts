@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3000/api/public';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/public';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -37,6 +37,16 @@ export const api = {
 
   getArticle: async (id: string | number) => {
     const response = await apiClient.get(`/news/${id}`);
+    return response.data;
+  },
+
+  getPlayers: async (params?: { teamSlug?: string }) => {
+    const response = await apiClient.get('/players', { params });
+    return response.data;
+  },
+
+  getStandings: async () => {
+    const response = await apiClient.get('/standings');
     return response.data;
   },
 
